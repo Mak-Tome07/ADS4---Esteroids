@@ -1,0 +1,44 @@
+body {
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.container > .navbar1{
+    display: flex;
+    justify-content: space-around;
+    background-color: orange;
+    padding: 10px;
+}
+
+.container > .navbar1 > input {
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: orange;
+    font-style: italic;
+    padding: 10px;
+}
+
+.container > .navbar1 > a {
+    border-radius: 5px;
+    padding: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: white;
+}
+
+.container > .navbar1 > button {
+    border: none;
+    border-radius: 5px;
+    background-color: white;
+    color: orange;    
+    font-weight: bold;
+    padding: 10px;
+}
+
+.container > .navbar1 > button:hover {
+    transition: 0.5s;
+    background-color: blue;
+    color: white;
+}
