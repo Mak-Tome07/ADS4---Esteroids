@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Esteroids Auth</title>
+
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/auth.css">
+
+</head>
+
+<body>
+
+  <main class="auth-container">
+
+    <!-- LEFT SIDE -->
+
+    <section class="auth-banner">
+
+      <div class="overlay"></div>
+
+      <div class="banner-content">
+
+        <span class="badge">
+          Figures Premium
+        </span>
+
+        <h1>
+          Colecione seus personagens favoritos.
+        </h1>
+
+        <p>
+          Figures exclusivas para verdadeiros fãs de anime,
+          games e fantasia.
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT SIDE -->
+
+    <section class="auth-panel">
+
+      <div class="auth-box">
+
+        <div class="auth-header">
+
+          <h2 id="form-title">
+            Login
+          </h2>
+
+          <p>
+            Entre para acessar sua conta.
+          </p>
+
+        </div>
+
+        <!-- LOGIN -->
+
+        <form class="auth-form" id="login-form">
+
+          <div class="input-group">
+
+            <label>Email</label>
+
+            <input
+              type="email"
+              placeholder="Digite seu email"
+            >
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Senha</label>
+
+            <input
+              type="password"
+              placeholder="Digite sua senha"
+            >
+
+          </div>
+
+          <button class="primary-btn">
+            Entrar
+          </button>
+
+        </form>
+
+        <!-- SIGNUP -->
+
+        <form class="auth-form hidden" id="signup-form">
+
+          <div class="input-group">
+
+            <label>Nome</label>
+
+            <input
+              type="text"
+              placeholder="Digite seu nome"
+            >
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Email</label>
+
+            <input
+              type="email"
+              placeholder="Digite seu email"
+            >
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Senha</label>
+
+            <input
+              type="password"
+              placeholder="Crie uma senha"
+            >
+
+          </div>
+
+          <div class="input-group">
+
+            <label>Confirmar senha</label>
+
+            <input
+              type="password"
+              placeholder="Repita sua senha"
+            >
+
+          </div>
+
+          <button class="primary-btn">
+            Criar Conta
+          </button>
+
+        </form>
+
+        <!-- TOGGLE -->
+
+        <div class="auth-toggle">
+
+          <span id="toggle-text">
+            Não possui conta?
+          </span>
+
+          <button id="toggle-btn">
+            Criar conta
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const loginForm =
+      document.getElementById("login-form");
+
+    const signupForm =
+      document.getElementById("signup-form");
+
+    const toggleBtn =
+      document.getElementById("toggle-btn");
+
+    const toggleText =
+      document.getElementById("toggle-text");
+
+    const formTitle =
+      document.getElementById("form-title");
+
+    let isLogin = true;
+
+    toggleBtn.addEventListener("click", () => {
+
+      isLogin = !isLogin;
+
+      loginForm.classList.toggle("hidden");
+      signupForm.classList.toggle("hidden");
+
+      if(isLogin){
+
+        formTitle.innerText = "Login";
+
+        toggleText.innerText =
+          "Não possui conta?";
+
+        toggleBtn.innerText =
+          "Criar conta";
+
+      }else{
+
+        formTitle.innerText =
+          "Criar Conta";
+
+        toggleText.innerText =
+          "Já possui conta?";
+
+        toggleBtn.innerText =
+          "Entrar";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>
