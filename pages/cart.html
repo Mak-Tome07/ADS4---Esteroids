@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/shop.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
 
 </head>
 
@@ -28,13 +29,14 @@
       Esteroids
     </div>
 
+    <div class="mobile-menu" id="mobileMenu">
     <nav class="nav-links">
 
       <a href="../pages/landing-page.html">
         Home
       </a>
 
-      <a href="../pages/landing-page.html#catalogo">
+      <a href="../pages/shop.html">
         Catálogo
       </a>
 
@@ -51,12 +53,23 @@
       </a>
 
     </div>
+    </div>
+
+    <button class="menu-toggle" id="menuToggle">
+
+      ☰
+
+    </button>
 
   </header>
 
   <!-- HEADER -->
 
   <section class="cart-header">
+
+    <a href="../pages/landing-page.html" class="back-link">
+      ← Voltar para loja
+    </a>
 
     <h1>
       Seu Carrinho
@@ -80,6 +93,7 @@
 
       <article class="cart-item">
 
+        <a href="../pages/product-details.html">
         <img
           src="https://placehold.co/200x200"
           alt=""
@@ -100,6 +114,7 @@
           </p>
 
         </div>
+        </a>
 
         <div class="cart-quantity">
 
@@ -213,6 +228,37 @@
     </aside>
 
   </main>
+
+  <Script>
+    const navbar =
+          document.querySelector(".navbar");
+      
+        window.addEventListener("scroll", () => {
+        
+          if(window.scrollY > 20){
+          
+            navbar.classList.add("navbar-scrolled");
+          
+          }else{
+          
+            navbar.classList.remove("navbar-scrolled");
+          
+          }
+        
+        });
+
+    const menuToggle =
+      document.getElementById("menuToggle");
+      
+    const mobileMenu =
+      document.getElementById("mobileMenu");
+      
+    menuToggle.addEventListener("click", () => {
+    
+      mobileMenu.classList.toggle("active");
+    
+    });
+  </Script>
 
 </body>
 </html>

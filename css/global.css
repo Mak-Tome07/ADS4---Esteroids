@@ -24,3 +24,25 @@ a{
 html{
   scroll-behavior:smooth;
 }
+
+.back-link{
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  color:var(--text-muted);
+
+  text-decoration:none;
+
+  margin-bottom:24px;
+
+  transition:var(--transition);
+}
+
+.back-link:hover{
+
+  color:var(--primary);
+}

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/admin.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
 
 </head>
 
@@ -54,6 +55,8 @@
 
   </aside>
 
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
   <!-- MAIN -->
 
   <main class="main-content">
@@ -62,9 +65,16 @@
 
     <header class="topbar">
 
-      <div>
+     <div class="topbar-left">
 
-        <h1>
+    <button
+      class="admin-menu-toggle"
+      id="adminMenuToggle"
+    >
+      ☰
+    </button>
+
+     <h1>
           Produtos
         </h1>
 
@@ -72,7 +82,8 @@
           Gerencie os produtos da loja.
         </p>
 
-      </div>
+
+  </div>
 
       <div class="admin-profile">
 
@@ -213,6 +224,41 @@
     </section>
 
   </main>
+
+     <script>
+    const adminMenuToggle =
+  document.getElementById("adminMenuToggle");
+
+const sidebar =
+  document.querySelector(".sidebar");
+
+const sidebarOverlay =
+  document.getElementById("sidebarOverlay");
+
+if(adminMenuToggle){
+
+  adminMenuToggle.addEventListener("click", () => {
+
+    sidebar.classList.toggle("active");
+
+    sidebarOverlay.classList.toggle("active");
+
+  });
+
+}
+
+if(sidebarOverlay){
+
+  sidebarOverlay.addEventListener("click", () => {
+
+    sidebar.classList.remove("active");
+
+    sidebarOverlay.classList.remove("active");
+
+  });
+
+}
+  </script>
 
 </body>
 </html>
