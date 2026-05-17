@@ -1,22 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Produtos</title>
-
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/admin.css">
   <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
-
 </head>
 
 <body>
@@ -24,35 +15,14 @@
   <!-- SIDEBAR -->
 
   <aside class="sidebar">
-
-    <div class="logo">
-      Esteroids
-    </div>
-
+    <div class="logo">Esteroids</div>
     <nav class="sidebar-nav">
-
-      <a href="../pages/admin-dashboard.html">
-        Dashboard
-      </a>
-
-      <a href="../pages/products.html" class="active">
-        Produtos
-      </a>
-
-      <a href="../pages/orders.html">
-        Pedidos
-      </a>
-
-      <a href="../pages/customers.html">
-        Clientes
-      </a>
-
+      <a href="../pages/admin-dashboard.html">Dashboard</a>
+      <a href="../pages/products.html" class="active">Produtos</a>
+      <a href="../pages/orders.html">Pedidos</a>
+      <a href="../pages/customers.html">Clientes</a>
     </nav>
-
-    <button class="logout-btn">
-      Logout
-    </button>
-
+    <button class="logout-btn">Logout</button>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -64,201 +34,98 @@
     <!-- TOPBAR -->
 
     <header class="topbar">
-
-     <div class="topbar-left">
-
-    <button
-      class="admin-menu-toggle"
-      id="adminMenuToggle"
-    >
-      ☰
-    </button>
-
-     <h1>
-          Produtos
-        </h1>
-
-        <p class="page-subtitle">
-          Gerencie os produtos da loja.
-        </p>
-
-
-  </div>
-
-      <div class="admin-profile">
-
-        <div class="avatar"></div>
-
-        <span>
-          Admin
-        </span>
-
+      <div class="topbar-left">
+        <button class="admin-menu-toggle" id="adminMenuToggle">☰</button>
+        <h1>Produtos</h1>
+        <p class="page-subtitle">Gerencie os produtos da loja.</p>
       </div>
-
+      <div class="admin-profile">
+        <div class="avatar"></div>
+        <span>Admin</span>
+      </div>
     </header>
 
     <!-- PRODUCTS HEADER -->
 
     <section class="products-header">
-
       <div class="search-box">
-
-        <input
-          type="text"
-          placeholder="Buscar produto..."
-        >
-
+        <input type="text" placeholder="Buscar produto...">
       </div>
-
-      <a href="../pages/product-form.html" class="primary-btn">
-        + Novo Produto
-      </a>
-
+      <a href="../pages/product-form.html" class="primary-btn">+ Novo Produto</a>
     </section>
 
     <!-- PRODUCTS TABLE -->
 
     <section class="table-container">
-
       <table class="products-table">
-
         <thead>
-
           <tr>
-
             <th>Imagem</th>
             <th>Nome</th>
             <th>Preço</th>
             <th>Estoque</th>
             <th>Status</th>
             <th>Ações</th>
-
           </tr>
-
         </thead>
-
         <tbody>
-
           <tr>
-
             <td>
-              <img
-                src="https://placehold.co/70x70"
-                class="product-image"
-              >
+              <img src="https://placehold.co/70x70" class="product-image">
             </td>
-
             <td>Gojo Satoru Figure</td>
-
             <td>R$ 499,90</td>
-
             <td>12</td>
-
             <td>
-              <span class="status active-status">
-                Ativo
-              </span>
+              <span class="status active-status">Ativo</span>
             </td>
-
             <td>
-
               <div class="actions">
-
-                <button class="edit-btn">
-                  Editar
-                </button>
-
-                <button class="disable-btn">
-                  Desativar
-                </button>
-
+                <button class="edit-btn">Editar</button>
+                <button class="disable-btn">Desativar</button>
               </div>
-
             </td>
-
           </tr>
-
           <tr>
-
             <td>
-              <img
-                src="https://placehold.co/70x70"
-                class="product-image"
-              >
+              <img src="https://placehold.co/70x70" class="product-image">
             </td>
-
             <td>2B Nier Automata</td>
-
             <td>R$ 799,90</td>
-
             <td>0</td>
-
             <td>
-              <span class="status inactive-status">
-                Sem estoque
-              </span>
+              <span class="status inactive-status">Sem estoque</span>
             </td>
-
             <td>
-
               <div class="actions">
-
-                <button class="edit-btn">
-                  Editar
-                </button>
-
-                <button class="disable-btn">
-                  Desativar
-                </button>
-
+                <button class="edit-btn">Editar</button>
+                <button class="disable-btn">Desativar</button>
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </section>
-
   </main>
 
-     <script>
-    const adminMenuToggle =
-  document.getElementById("adminMenuToggle");
+  <script>
+    const adminMenuToggle = document.getElementById("adminMenuToggle");
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-const sidebar =
-  document.querySelector(".sidebar");
+    if(adminMenuToggle) {
+      adminMenuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        sidebarOverlay.classList.toggle("active");
+      });
+    }
 
-const sidebarOverlay =
-  document.getElementById("sidebarOverlay");
-
-if(adminMenuToggle){
-
-  adminMenuToggle.addEventListener("click", () => {
-
-    sidebar.classList.toggle("active");
-
-    sidebarOverlay.classList.toggle("active");
-
-  });
-
-}
-
-if(sidebarOverlay){
-
-  sidebarOverlay.addEventListener("click", () => {
-
-    sidebar.classList.remove("active");
-
-    sidebarOverlay.classList.remove("active");
-
-  });
-
-}
+    if(sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        sidebarOverlay.classList.remove("active");
+      });
+    }
   </script>
-
 </body>
 </html>

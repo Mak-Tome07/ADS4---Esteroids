@@ -1,61 +1,30 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pedidos</title>
-
   <link rel="stylesheet" href="../css/variables.css">
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/admin.css">
   <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
-
 </head>
-
 <body>
 
   <!-- SIDEBAR -->
 
   <aside class="sidebar">
-
-    <div class="logo">
-      Esteroids
-    </div>
-
+    <div class="logo">Esteroids</div>
     <nav class="sidebar-nav">
-
-      <a href="../pages/admin-dashboard.html">
-        Dashboard
-      </a>
-
-      <a href="../pages/products.html">
-        Produtos
-      </a>
-
-      <a href="../pages/orders.html" class="active">
-        Pedidos
-      </a>
-
-      <a href="../pages/customers.html">
-        Clientes
-      </a>
-
+      <a href="../pages/admin-dashboard.html">Dashboard</a>
+      <a href="../pages/products.html">Produtos</a>
+      <a href="../pages/orders.html" class="active">Pedidos</a>
+      <a href="../pages/customers.html">Clientes</a>
     </nav>
-
-    <button class="logout-btn">
-      Logout
-    </button>
-
+    <button class="logout-btn">Logout</button>
   </aside>
 
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <!-- MAIN -->
 
@@ -65,94 +34,44 @@
 
     <header class="topbar">
       <div class="topbar-left">
-
-    <button
-      class="admin-menu-toggle"
-      id="adminMenuToggle"
-    >
-      ☰
-    </button>
-
-    <h1>
-          Pedidos
-        </h1>
-
-        <p class="page-subtitle">
-          Gerencie os pedidos realizados.
-        </p>
-
-  </div>
-
-      <div class="admin-profile">
-
-        <div class="avatar"></div>
-
-        <span>
-          Admin
-        </span>
-
+      <button class="admin-menu-toggle" id="adminMenuToggle">☰</button>
+      <h1>Pedidos</h1>
+      <p class="page-subtitle">Gerencie os pedidos realizados.</p>
       </div>
-
+      <div class="admin-profile">
+        <div class="avatar"></div>
+        <span>Admin</span>
+      </div>
     </header>
 
     <!-- FILTERS -->
 
     <section class="products-header">
-
       <div class="search-box">
-
-        <input
-          type="text"
-          placeholder="Buscar pedido..."
-        >
-
+        <input type="text" placeholder="Buscar pedido...">
       </div>
-
       <select class="filter-select">
-
-        <option>
-          Todos Status
-        </option>
-
-        <option>
-          Pendente
-        </option>
-
-        <option>
-          Pago
-        </option>
-
-        <option>
-          Enviado
-        </option>
-
-        <option>
-          Cancelado
-        </option>
-
+        <option>Todos Status</option>
+        <option>Pendente</option>
+        <option>Pago</option>
+        <option>Enviado</option>
+        <option>Cancelado</option>
       </select>
-
     </section>
 
     <!-- TABLE -->
 
     <section class="table-container">
-
       <table class="products-table">
-
         <thead>
-
           <tr>
-
             <th>ID</th>
             <th>Cliente</th>
             <th>Data</th>
             <th>Status</th>
             <th>Total</th>
             <th>Ações</th>
-
           </tr>
-
         </thead>
 
         <tbody>
@@ -160,147 +79,75 @@
           <!-- ORDER -->
 
           <tr>
-
             <td>#1024</td>
-
             <td>Ernesto</td>
-
             <td>16/04/2026</td>
-
             <td>
-
-              <span class="status pending-status">
-                Pendente
-              </span>
-
+              <span class="status pending-status">Pendente</span>
             </td>
-
             <td>R$ 799,90</td>
-
             <td>
-
               <div class="actions">
-
-                <button class="edit-btn">
-                  Detalhes
-                </button>
-
+                <button class="edit-btn">Detalhes</button>
               </div>
-
             </td>
-
           </tr>
 
           <!-- ORDER -->
 
           <tr>
-
             <td>#1025</td>
-
             <td>Lucas</td>
-
             <td>16/04/2026</td>
-
             <td>
-
-              <span class="status success-status">
-                Pago
-              </span>
-
+              <span class="status success-status">Pago</span>
             </td>
-
             <td>R$ 499,90</td>
-
             <td>
-
               <div class="actions">
-
-                <button class="edit-btn">
-                  Detalhes
-                </button>
-
+                <button class="edit-btn">Detalhes</button>
               </div>
-
             </td>
-
           </tr>
 
           <!-- ORDER -->
 
           <tr>
-
             <td>#1026</td>
-
             <td>Amanda</td>
-
             <td>15/04/2026</td>
-
             <td>
-
-              <span class="status shipped-status">
-                Enviado
-              </span>
-
+              <span class="status shipped-status">Enviado</span>
             </td>
-
             <td>R$ 1299,90</td>
-
             <td>
-
               <div class="actions">
-
-                <button class="edit-btn">
-                  Detalhes
-                </button>
-
+                <button class="edit-btn">Detalhes</button>
               </div>
-
             </td>
-
           </tr>
-
         </tbody>
-
       </table>
-
     </section>
-
   </main>
+  <script>
+    const adminMenuToggle = document.getElementById("adminMenuToggle");
+    const sidebar = document.querySelector(".sidebar");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
 
-    <script>
-    const adminMenuToggle =
-  document.getElementById("adminMenuToggle");
+    if(adminMenuToggle) {
+      adminMenuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        sidebarOverlay.classList.toggle("active");
+      });
+    }
 
-const sidebar =
-  document.querySelector(".sidebar");
-
-const sidebarOverlay =
-  document.getElementById("sidebarOverlay");
-
-if(adminMenuToggle){
-
-  adminMenuToggle.addEventListener("click", () => {
-
-    sidebar.classList.toggle("active");
-
-    sidebarOverlay.classList.toggle("active");
-
-  });
-
-}
-
-if(sidebarOverlay){
-
-  sidebarOverlay.addEventListener("click", () => {
-
-    sidebar.classList.remove("active");
-
-    sidebarOverlay.classList.remove("active");
-
-  });
-
-}
+    if(sidebarOverlay) {
+      sidebarOverlay.addEventListener("click", () => {
+        sidebar.classList.remove("active");
+        sidebarOverlay.classList.remove("active");
+      });
+    }
   </script>
-
 </body>
 </html>
