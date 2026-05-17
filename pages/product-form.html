@@ -109,25 +109,6 @@
       </form>
     </section>
   </main>
-
-  <script>
-    const adminMenuToggle = document.getElementById("adminMenuToggle");
-    const sidebar = document.querySelector(".sidebar");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
-
-    if(adminMenuToggle) {
-      adminMenuToggle.addEventListener("click", () => {
-        sidebar.classList.toggle("active");
-        sidebarOverlay.classList.toggle("active");
-      });
-    }
-
-    if(sidebarOverlay) {
-      sidebarOverlay.addEventListener("click", () => {
-        sidebar.classList.remove("active");  
-        sidebarOverlay.classList.remove("active");
-      });
-    }
-  </script>
+  <script src="../js/main.js" defer></script>
 </body>
 </html>

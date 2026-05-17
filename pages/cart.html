@@ -98,25 +98,6 @@
       <a href="../pages/checkout.html" class="primary-btn checkout-btn">Finalizar Compra</a>
     </aside>
   </main>
-
-  <Script>
-    const navbar = document.querySelector(".navbar");
-
-    window.addEventListener("scroll", () => {
-      if(window.scrollY > 20) {
-        navbar.classList.add("navbar-scrolled");
-      }
-      else {
-        navbar.classList.remove("navbar-scrolled");
-      }
-    });
-
-    const menuToggle = document.getElementById("menuToggle");
-    const mobileMenu = document.getElementById("mobileMenu");
-
-    menuToggle.addEventListener("click", () => {
-      mobileMenu.classList.toggle("active");
-    });
-  </Script>
+  <script src="../js/main.js" defer></script>
 </body>
 </html>

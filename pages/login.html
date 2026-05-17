@@ -79,30 +79,6 @@
       </div>
     </section>
   </main>
-  <script>
-    const loginForm = document.getElementById("login-form");
-    const signupForm = document.getElementById("signup-form");
-    const toggleBtn = document.getElementById("toggle-btn");
-    const toggleText = document.getElementById("toggle-text");
-    const formTitle = document.getElementById("form-title");
-    let isLogin = true;
-
-    toggleBtn.addEventListener("click", () => {
-      isLogin = !isLogin;
-      loginForm.classList.toggle("hidden");
-      signupForm.classList.toggle("hidden");
-
-      if(isLogin) {
-        formTitle.innerText = "Login";
-        toggleText.innerText = "Não possui conta?";
-        toggleBtn.innerText = "Criar conta";
-      }
-      else {
-        formTitle.innerText = "Criar Conta";
-        toggleText.innerText = "Já possui conta?";
-        toggleBtn.innerText = "Entrar";
-      }
-    });
-  </script>
+  <script src="../js/main.js" defer></script>
 </body>
 </html>
