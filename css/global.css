@@ -1,0 +1,38 @@
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter, sans-serif;
+}
+
+button, input{
+  font:inherit;
+}
+
+a{
+  text-decoration:none;
+  color:inherit;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+.back-link{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  color:var(--text-muted);
+  text-decoration:none;
+  margin-bottom:24px;
+  transition:var(--transition);
+}
+
+.back-link:hover{
+  color:var(--primary);
+}
