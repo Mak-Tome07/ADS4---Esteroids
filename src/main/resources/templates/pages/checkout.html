@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteroids | Checkout</title>
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/shop.css">
-  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/shop.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
 
 <body>
@@ -18,8 +18,8 @@
     <div class="logo">Esteroids</div>
     <div class="mobile-menu" id="mobileMenu">
       <nav class="nav-links">
-        <a href="../pages/shop.html">Catálogo</a>
-        <a href="../pages/cart.html">Carrinho</a>
+        <a th:href="@{shop}">Catálogo</a>
+        <a href="@{/cart}">Carrinho</a>
       </nav>
     </div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -28,7 +28,7 @@
   <!-- HEADER -->
 
   <section class="checkout-header">
-    <a href="../pages/landing-page.html" class="back-link">← Voltar para loja</a>
+    <a href="@{/}" class="back-link">← Voltar para loja</a>
     <h1>Checkout</h1>
     <p>Finalize sua compra com segurança.</p>
   </section>
@@ -111,30 +111,34 @@
 
     <aside class="checkout-summary">
       <h2>Resumo do Pedido</h2>
-      <div class="summary-product">
-        <span>Jareth Sirius</span>
-        <span>R$ 459,90</span>
-      </div>
-      <div class="summary-product">
-        <span>Maven Sirius</span>
-        <span>R$ 459,90</span>
+      <div class="summary-product" th:each="item : ${cart}">
+        <span th:text="${item.product.name}"></span>
+        <span>
+          R$
+          <span th:text="${item.subtotal}"></span>
+        </span>
       </div>
       <div class="summary-divider"></div>
-      <div class="summary-row">
-        <span>Subtotal</span>
-        <span>R$ 919,80</span>
-      </div>
+      <span>
+        R$
+        <span th:text="${total}"></span>
+      </span>
       <div class="summary-row">
         <span>Frete</span>
         <span>R$ 29,90</span>
       </div>
       <div class="summary-row total-row">
         <span>Total</span>
-        <span>R$ 949,70</span>
+        <span>
+          R$
+          <span th:text="${total + 29.90}"></span>
+        </span>
       </div>
-      <button class="primary-btn checkout-btn">Confirmar Compra</button>
+      <form action="/checkout" method="post">
+        <button class="primary-btn checkout-btn">Confirmar Compra</button>
+      </form>
     </aside>
   </main>
-  <script src="../js/main.js" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

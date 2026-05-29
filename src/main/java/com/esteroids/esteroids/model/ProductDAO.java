@@ -45,6 +45,23 @@ public class ProductDAO {
         return Product.converterRegistro((Map<String,Object>) jdbc.queryForMap(sql, id));
     }
 
+    public List<Product> buscarProdutos(String search){
+        String sql = "SELECT * FROM products " + "WHERE LOWER(name) LIKE LOWER(?)";
+        List<Map<String,Object>> registros = jdbc.queryForList(sql, "%" + search + "%");
+        List<Product> lista = new ArrayList<>();
+
+        for(Map<String,Object> registro : registros){
+            lista.add(Product.converterRegistro(registro));
+        }
+
+        return lista;
+    }
+
+    public List<String> obterCategorias(){
+        String sql = "SELECT DISTINCT category " + "FROM products " + "WHERE category IS NOT NULL";
+        return jdbc.queryForList(sql, String.class);
+    }
+
     public List<Product> obterProdutosPorCategoria(Category category, int produtoAtualId){
         String sql = "SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4";
         List<Map<String,Object>> registros = jdbc.queryForList(sql, category.toString(), produtoAtualId);
@@ -52,6 +69,41 @@ public class ProductDAO {
         for(Map<String,Object> registro : registros){
             lista.add(Product.converterRegistro(registro));
         }
+        return lista;
+    }
+
+    public List<Product> filtrarProdutos(String search,String category,Boolean inStock){
+        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE active = true");
+        List<Object> params = new ArrayList<>();
+
+        if(search != null && !search.isBlank()){
+            sql.append(" AND LOWER(name) LIKE LOWER(?)");
+            params.add("%" + search + "%");
+        }
+
+        if(category != null && !category.isBlank()){
+            sql.append(" AND category = ?");
+            params.add(category);
+        }
+
+        if(inStock != null && inStock){
+            sql.append(" AND stock > 0");
+        }
+
+        List<Map<String,Object>> registros =
+            jdbc.queryForList(
+                sql.toString(),
+                params.toArray()
+            );
+
+        List<Product> lista = new ArrayList<>();
+
+        for(Map<String,Object> registro : registros){
+            lista.add(
+                Product.converterRegistro(registro)
+            );
+        }
+
         return lista;
     }
 

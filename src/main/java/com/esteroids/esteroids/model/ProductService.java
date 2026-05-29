@@ -21,6 +21,18 @@ public class ProductService {
     public Product obterProduto(int id){
         return pdao.obterProduto(id);
     }
+
+    public List<Product> buscarProdutos(String search){
+        return pdao.buscarProdutos(search);
+    }
+
+    public List<String> obterCategorias(){
+        return pdao.obterCategorias();
+    }
+
+    public List<Product> filtrarProdutos(String search,String category,Boolean inStock){
+        return pdao.filtrarProdutos(search,category,inStock);
+    }
     
     public void atualizarProduto(int id, Product novo){
         pdao.atualizarProduto(id, novo);

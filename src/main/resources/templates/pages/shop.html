@@ -12,23 +12,24 @@
 
 <body>
 
-
-
-  <!-- NAVBAR do sofrimento -->
+  <!-- NAVBAR -->
 
   <header class="navbar">
     <div class="logo">Esteroids</div>
     <div class="mobile-menu" id="mobileMenu">
       <nav class="nav-links">
-        <a href="../pages/landing-page.html">Home</a>
-        <a href="../pages/shop.html" class="active-link">Catálogo</a>
-        <a href="../pages/landing-page.html#categorias">Categorias</a>
-        <a href="../pages/landing-page.html#contato">Contato</a>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/shop}" class="active-link">Catálogo</a>
+        <a th:href="@{/#categorias}">Categorias</a>
+        <a th:href="@{/#contato}">Contato</a>
       </nav>
       <div class="nav-actions">
-        <button class="secondary-btn">Buscar</button>
-        <a href="../pages/login.html" class="secondary-btn auth-btn">Login</a>
-        <a href="../pages/cart.html" class="cart-btn">Carrinho (2)</a>
+        <form th:action="@{/shop}" method="get" class="shop-search">
+          <input type="text" name="search" placeholder="Buscar produto...">
+          <button type="submit" class="secondary-btn">Buscar</button>
+        </form>
+        <a th:href="@{/login.html}" class="secondary-btn auth-btn">Login</a>
+        <a th:href="@{/cart.html}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
       </div>
     </div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -53,33 +54,25 @@
     <!-- SIDEBAR -->
 
     <aside class="filters-sidebar">
-      <div class="filter-group">
-        <h3>Categorias</h3>
-        <label>
-          <input type="checkbox">Anime
-        </label>
-        <label>
-          <input type="checkbox">Games
-        </label>
-        <label>
-          <input type="checkbox">Fantasy
-        </label>
-        <label>
-          <input type="checkbox">Filmes
-        </label>
-      </div>
-      <div class="filter-group">
-        <h3>Status</h3>
-        <label>
-          <input type="checkbox">Em estoque
-        </label>
-        <label>
-          <input type="checkbox">Exclusivos
-        </label>
-        <label>
-          <input type="checkbox">Novidades
-        </label>
-      </div>
+      <form th:action="@{/shop}" method="get">
+        <div class="filter-group">
+          <h3>Categorias</h3>
+          <div th:each="categoria : ${categorias}">
+            <label>
+              <input type="radio" name="category" th:value="${categoria}">
+              <span th:text="${categoria}"></span>
+            </label>
+          </div>
+        </div>
+        <div class="filter-group">
+          <h3>Status</h3>
+          <label>
+            <input type="checkbox" name="inStock"value="true">
+            Em estoque
+          </label>
+        </div>
+        <button type="submit" class="primary-btn">Filtrar</button>
+      </form>
     </aside>
 
     <!-- PRODUCTS -->
@@ -94,7 +87,9 @@
             <span class="catalog-category" th:text="${produto.category}"></span>
             <h3 th:text="${produto.name}"></h3>
             <p class="catalog-price" th:text="'R$ ' + ${produto.price}"></p>
-            <button class="primary-btn" h:if="${produto.stock > 0}">Adicionar ao Carrinho</button>
+            <form th:action="@{'/cart/add/' + ${produto.id}}" method="post">
+                <button class="primary-btn"> Adicionar ao Carrinho</button>
+            </form>
             <button class="primary-btn disabled-btn" th:if="${produto.stock <= 0}">Indisponível</button>
           </div>
         </a>
@@ -118,9 +113,9 @@
 
       <div class="footer-column">
         <h4>Navegação</h4>
-        <a href="#home">Home</a>
-        <a href="#catalogo">Catálogo</a>
-        <a href="#categorias">Categorias</a>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/shop}">Catálogo</a>
+        <a th:href="@{/#categorias}">Categorias</a>
       </div>
 
       <!-- CONTACT -->

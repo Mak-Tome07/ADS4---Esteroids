@@ -25,6 +25,7 @@ public class UserDAO {
 		jdbc = new JdbcTemplate(dataSource);
 	}
 
+    // CREATE
     public void inserirUsuario(User usuario){
         String sql = "INSERT INTO usuario(username,email,password) VALUES(?,?,?)";
         Object[] obj = new Object[3];
@@ -34,6 +35,13 @@ public class UserDAO {
         jdbc.update(sql,obj);
     }
 
+    // RESEARCH
+    public User obterUsuario(int id){
+        String sql = "SELECT * FROM usuario where id=?";
+        return User.converterRegistros((Map<String,Object>) jdbc.queryForMap(sql,id));
+    }
+
+    // UPDATE
     public void atualizarUsuario(int id, User novo){
         String sql = "UPDATE usuario SET username = ?, email = ?, password = ? where id = ?";
         Object[] obj = new Object[4];
@@ -44,11 +52,10 @@ public class UserDAO {
         jdbc.update(sql,obj);
     }
 
-    public User obterUsuario(int id){
-        String sql = "SELECT * FROM usuario where id=?";
-        return User
-            .converterRegistros((Map<String,Object>) jdbc.queryForMap(sql,id));
-
+    // DELETE
+    public void deletarUsuario(int id){
+        String sql = "DELETE FROM usuario WHERE id = ?";
+        jdbc.update(sql,id);
     }
 
     public List<User> obterTodosUsuarios(){
@@ -59,10 +66,5 @@ public class UserDAO {
             aux.add(User.converterRegistros(registro));
         }
         return aux;
-    }
-
-    public void deletarUsuario(int id){
-        String sql = "DELETE FROM usuario WHERE id = ?";
-        jdbc.update(sql,id);
-    }
+    }    
 }

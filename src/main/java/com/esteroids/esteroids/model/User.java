@@ -1,4 +1,3 @@
-
 package com.esteroids.esteroids.model;
 
 import java.util.Map;
@@ -91,5 +90,4 @@ public class User {
 
         return new User(id,username,email,password,role,active != null ? active : false);
     }
-
 }

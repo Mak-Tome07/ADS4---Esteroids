@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteroids | Carrinho</title>
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/shop.css">
-  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/shop.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
 <body>
 
@@ -17,12 +17,16 @@
     <div class="logo">Esteroids</div>
     <div class="mobile-menu" id="mobileMenu">
       <nav class="nav-links">
-        <a href="../pages/landing-page.html">Home</a>
-        <a href="../pages/shop.html">Catálogo</a>
-        <a href="../pages/landing-page.html#contato">Contato</a>
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/shop}">Catálogo</a>
+        <a th:href="@{/#contato}">Contato</a>
       </nav>
       <div class="nav-actions">
-        <a href="../pages/login.html" class="secondary-btn">Login</a>
+        <form th:action="@{/shop}" method="get" class="shop-search">
+          <input type="text" name="search" placeholder="Buscar produto...">
+          <button type="submit" class="secondary-btn">Buscar</button>
+        </form>
+        <a th:href="@{/login}" class="secondary-btn auth-btn">Login</a>
       </div>
     </div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -31,7 +35,7 @@
   <!-- HEADER -->
 
   <section class="cart-header">
-    <a href="../pages/landing-page.html" class="back-link">← Voltar para loja</a>
+    <a th:href="@{/}" class="back-link">← Voltar para loja</a>
     <h1>Seu Carrinho</h1>
     <p>Revise seus produtos antes do checkout./p>
   </section>
@@ -43,40 +47,34 @@
     <!-- ITEMS -->
 
     <section class="cart-items">
+      <div th:if="${#lists.isEmpty(cart)}">
+        <p>Seu carrinho está vazio.</p>
+      </div>
 
-      <!-- ITEM -->
+      <div th:unless="${#lists.isEmpty(cart)}">
 
-      <article class="cart-item">
-          <a href="../pages/product-details.html"><img src="../assets/Jareth-Sirius.png" alt="Jareth Sirius"></a>
-          <div class="cart-info">
-            <span class="catalog-category">Fantasy</span>
-            <h3>Jareth Sirius</h3>
-            <p class="cart-price">R$ 459,90</p>
+        <!-- ITEM -->
+
+        <article class="cart-item" th:each="item : ${cart}">
+            <a th:href="@{'/produto/' + ${item.product.id}}">
+              <img th:src="${item.product.imageUrl}" th:alt="${item.product.name}">
+            </a>
+            <div class="cart-info">
+              <span class="catalog-category" th:text="${item.product.category}"></span>
+              <h3 th:text="${item.product.name}"></h3>
+              <p class="cart-price">R$
+                <span th:text="${item.product.price}"></span>
+              </p>
+            </div>
+
+          <div class="cart-quantity">
+            <button>-</button>
+            <span th:text="${item.quantity}"></span>
+            <button>+</button>
           </div>
-        <div class="cart-quantity">
-          <button>-</button>
-          <span>1</span>
-          <button>+</button>
-        </div>
-        <button class="remove-btn">Remover</button>
-      </article>
-
-      <!-- ITEM -->
-
-      <article class="cart-item">
-        <img src="../assets/Maven-Sirius.png" alt="Maven Sirius">
-        <div class="cart-info">
-          <span class="catalog-category">Fantasy</span>
-          <h3>Maven Sirius</h3>
-          <p class="cart-price">R$ 459,90</p>
-        </div>
-        <div class="cart-quantity">
-          <button>-</button>
-          <span>1</span>
-          <button>+</button>
-        </div>
-        <button class="remove-btn">Remover</button>
-      </article>
+          <a th:href="@{'/cart/remove/' + ${item.product.id}}" class="remove-btn">Remover</a>
+        </article>
+      </div>
     </section>
 
     <!-- SUMMARY -->
@@ -85,7 +83,9 @@
       <h2>Resumo</h2>
       <div class="summary-row">
         <span>Subtotal</span>
-        <span>R$ 919,80</span>
+        <span>R$
+          <span th:text="${total}"></span>
+        </span>
       </div>
       <div class="summary-row">
         <span>Frete</span>
@@ -93,11 +93,16 @@
       </div>
       <div class="summary-row total-row">
         <span>Total</span>
-        <span> R$ 949,70</span>
+        <span>
+          R$
+          <span th:text="${total + 29.90}"></span>
+        </span>
       </div>
-      <a href="../pages/checkout.html" class="primary-btn checkout-btn">Finalizar Compra</a>
+      <a href="#" class="primary-btn checkout-btn">
+        Finalizar Compra
+      </a>
     </aside>
   </main>
-  <script src="../js/main.js" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>
