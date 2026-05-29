@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteroids | Carrinho</title>
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/shop.css">
+  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+
+  <header class="navbar">
+    <div class="logo">Esteroids</div>
+    <div class="mobile-menu" id="mobileMenu">
+      <nav class="nav-links">
+        <a href="../pages/landing-page.html">Home</a>
+        <a href="../pages/shop.html">Catálogo</a>
+        <a href="../pages/landing-page.html#contato">Contato</a>
+      </nav>
+      <div class="nav-actions">
+        <a href="../pages/login.html" class="secondary-btn">Login</a>
+      </div>
+    </div>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </header>
+
+  <!-- HEADER -->
+
+  <section class="cart-header">
+    <a href="../pages/landing-page.html" class="back-link">← Voltar para loja</a>
+    <h1>Seu Carrinho</h1>
+    <p>Revise seus produtos antes do checkout./p>
+  </section>
+
+  <!-- CART LAYOUT -->
+
+  <main class="cart-layout">
+
+    <!-- ITEMS -->
+
+    <section class="cart-items">
+
+      <!-- ITEM -->
+
+      <article class="cart-item">
+          <a href="../pages/product-details.html"><img src="../assets/Jareth-Sirius.png" alt="Jareth Sirius"></a>
+          <div class="cart-info">
+            <span class="catalog-category">Fantasy</span>
+            <h3>Jareth Sirius</h3>
+            <p class="cart-price">R$ 459,90</p>
+          </div>
+        <div class="cart-quantity">
+          <button>-</button>
+          <span>1</span>
+          <button>+</button>
+        </div>
+        <button class="remove-btn">Remover</button>
+      </article>
+
+      <!-- ITEM -->
+
+      <article class="cart-item">
+        <img src="../assets/Maven-Sirius.png" alt="Maven Sirius">
+        <div class="cart-info">
+          <span class="catalog-category">Fantasy</span>
+          <h3>Maven Sirius</h3>
+          <p class="cart-price">R$ 459,90</p>
+        </div>
+        <div class="cart-quantity">
+          <button>-</button>
+          <span>1</span>
+          <button>+</button>
+        </div>
+        <button class="remove-btn">Remover</button>
+      </article>
+    </section>
+
+    <!-- SUMMARY -->
+
+    <aside class="cart-summary">
+      <h2>Resumo</h2>
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>R$ 919,80</span>
+      </div>
+      <div class="summary-row">
+        <span>Frete</span>
+        <span>R$ 29,90</span>
+      </div>
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <span> R$ 949,70</span>
+      </div>
+      <a href="../pages/checkout.html" class="primary-btn checkout-btn">Finalizar Compra</a>
+    </aside>
+  </main>
+  <script src="../js/main.js" defer></script>
+</body>
+</html>

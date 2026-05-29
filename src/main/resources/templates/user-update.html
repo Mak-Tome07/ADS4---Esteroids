@@ -1,0 +1,14 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edição de usuario</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <form action="#" th:action="@{'/usuario/' + ${id} + '/atualizar'}" method=post th:object="${user}">
+    	Nome: <input type="text" th:field="*{username}"><br>
+    	Senha: <input type="text" th:field="*{password}">
+    	<input type="submit" value="Atualizar">
+    </form>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esteroids | Produto</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/shop.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+
+  <header class="navbar">
+    <div class="logo">Esteroids</div>
+      <div class="mobile-menu" id="mobileMenu">
+      <nav class="nav-links">
+        <a href="../pages/landing-page.html">Home</a>
+        <a href="../pages/shop.html">Catálogo</a>
+        <a href="../pages/landing-page.html#contato">Contato</a>
+      </nav>
+      <div class="nav-actions">
+          <button class="secondary-btn">Buscar</button>
+          <a href="../pages/login.html" class="secondary-btn auth-btn">Login</a>
+          <a href="../pages/cart.html" class="cart-btn">Carrinho (2)</a>
+      </div>
+    </div>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+  </header>
+
+  <!-- PRODUCT -->
+
+  <main class="product-page">
+
+    <!-- GALLERY -->
+
+    <section class="product-gallery">
+      <div class="main-image">
+        <img th:src="${produto.imageUrl}" th:alt="${produto.name}">
+      </div>
+    </section>
+
+    <!-- INFO -->
+
+    <section class="product-details">
+      <span class="catalog-category" th:text="${produto.category}"></span>
+      <h1 th:text="${produto.name}"></h1>
+      <p class="product-price" th:text="'R$ ' + ${produto.price}"></p>
+      <p class="product-description" th:text="${produto.description}"></p>
+
+      <!-- STATUS -->
+
+      <span class="stock-badge" th:if="${produto.stock > 0}">Em Estoque</span>
+      <span class="stock-badge out-badge" th:if="${produto.stock <= 0}">Sem Estoque</span>
+
+      <!-- QUANTITY -->
+
+      <div class="quantity-wrapper">
+        <span>Quantidade</span>
+        <div class="cart-quantity">
+          <button>-</button>
+          <span>1</span>
+          <button>+</button>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
+
+      <div class="product-actions">
+        <button class="primary-btn add-cart-btn" th:if="${produto.stock > 0}">Adicionar ao Carrinho</button>
+        <button class="primary-btn disabled-btn" th:if="${produto.stock <= 0}">Indisponível</button>
+        <button class="secondary-btn">Favoritar</button>
+      </div>
+
+      <!-- EXTRA INFO -->
+
+      <div class="product-extra-info">
+        <div class="info-card">
+          <h3>Frete Seguro</h3>
+          <p>Envio protegido para todo Brasil.</p>
+        </div>
+        <div class="info-card">
+          <h3>Produto Oficial</h3>
+          <p>Figures licenciadas e premium.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- RELATED -->
+
+  <section class="related-products">
+    <div class="section-header">
+      <h2>Produtos Relacionados</h2>
+      <p>Você também pode gostar.</p>
+    </div>
+
+    <div class="products-grid">
+      <article class="product-card" th:each="relacionado : ${relacionados}">
+        <a th:href="@{'/produto/' + ${relacionado.id}}">
+          <img th:src="${relacionado.imageUrl}" th:alt="${relacionado.name}">
+          <div class="product-info">
+            <span class="category" th:text="${relacionado.category}"></span>
+            <h3 th:text="${relacionado.name}"></h3>
+            <p class="price" th:text="'R$ ' + ${relacionado.price}"></p>
+            <button class="primary-btn" th:if="${relacionado.stock > 0}">Adicionar</button>
+            <button class="primary-btn disabled-btn" th:if="${relacionado.stock <= 0}">Indisponível</button>
+          </div>
+        </a>
+      
+      </article>
+    
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+
+  <footer class="footer" id="contato">
+    <div class="footer-grid">
+
+      <!-- BRAND -->
+
+      <div class="footer-column">
+        <h3>Esteroids</h3>
+        <p>Figures premium para colecionadores de anime, games e fantasia.</p>
+      </div>
+
+      <!-- LINKS -->
+
+      <div class="footer-column">
+        <h4>Navegação</h4>
+        <a href="#home">Home</a>
+        <a href="#catalogo">Catálogo</a>
+        <a href="#categorias">Categorias</a>
+      </div>
+
+      <!-- CONTACT -->
+
+      <div class="footer-column">
+        <h4>Contato</h4>
+        <p>contato@esteroids.com</p>
+        <p>(11) 99999-9999</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© <span id="currentYear"></span> Esteroids — Todos os direitos reservados.</p>
+    </div>
+  </footer>
+  <script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>
