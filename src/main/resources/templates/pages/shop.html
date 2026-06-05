@@ -24,12 +24,8 @@
         <a th:href="@{/#contato}">Contato</a>
       </nav>
       <div class="nav-actions">
-        <form th:action="@{/shop}" method="get" class="shop-search">
-          <input type="text" name="search" placeholder="Buscar produto...">
-          <button type="submit" class="secondary-btn">Buscar</button>
-        </form>
-        <a th:href="@{/login.html}" class="secondary-btn auth-btn">Login</a>
-        <a th:href="@{/cart.html}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
+        <a th:href="@{/login}" class="secondary-btn auth-btn">Login</a>
+        <a th:href="@{/cart}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
       </div>
     </div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -42,9 +38,10 @@
       <h1>Catálogo</h1>
       <p>Explore figures premium da Esteroids.</p>
     </div>
-    <div class="shop-search">
-      <input type="text" placeholder="Buscar figure...">
-    </div>
+    <form th:action="@{/shop}" method="get" class="shop-search">
+          <input type="text" name="search" placeholder="Buscar produto...">
+          <button type="submit" class="secondary-btn">Buscar</button>
+        </form>
   </section>
 
   <!-- SHOP LAYOUT -->
@@ -88,10 +85,10 @@
             <h3 th:text="${produto.name}"></h3>
             <p class="catalog-price" th:text="'R$ ' + ${produto.price}"></p>
             <form th:action="@{'/cart/add/' + ${produto.id}}" method="post">
-                <button class="primary-btn"> Adicionar ao Carrinho</button>
+                <input type="hidden" name="quantity" value="1">
+                <button class="primary-btn" type="submit" th:if="${produto.stock > 0}">Adicionar</button>
+                <button class="primary-btn disabled-btn" type="button" th:if="${produto.stock <= 0}">Indisponível</button>
             </form>
-            <button class="primary-btn disabled-btn" th:if="${produto.stock <= 0}">Indisponível</button>
-          </div>
         </a>
       </article>
     </section>

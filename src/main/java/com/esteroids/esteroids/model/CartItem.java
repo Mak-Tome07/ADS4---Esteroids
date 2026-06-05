@@ -1,5 +1,7 @@
 package com.esteroids.esteroids.model;
 
+import java.math.BigDecimal;
+
 public class CartItem {
 
     private Product product;
@@ -30,7 +32,7 @@ public class CartItem {
         this.quantity++;
     }
 
-    public double getSubtotal(){
-        return product.getPrice().doubleValue() * quantity;
+    public BigDecimal getSubtotal(){
+        return product.getPrice().multiply(BigDecimal.valueOf(quantity));
     }
 }

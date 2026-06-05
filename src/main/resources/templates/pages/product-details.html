@@ -22,10 +22,6 @@
         <a th:href="@{/#contato}">Contato</a>
       </nav>
       <div class="nav-actions">
-        <form th:action="@{/shop}" method="get" class="shop-search">
-          <input type="text" name="search" placeholder="Buscar produto...">
-          <button type="submit" class="secondary-btn">Buscar</button>
-        </form>
         <a th:href="@{/login}" class="secondary-btn auth-btn">Login</a>
         <a th:href="@{/cart}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
       </div>
@@ -111,14 +107,13 @@
             <h3 th:text="${relacionado.name}"></h3>
             <p class="price" th:text="'R$ ' + ${relacionado.price}"></p>
             <form th:action="@{'/cart/add/' + ${relacionado.id}}" method="post">
-                <button class="primary-btn add-cart-btn">Adicionar ao Carrinho</button>
+              <input type="hidden" name="quantity" value="1">
+              <button class="primary-btn add-cart-btn">Adicionar ao Carrinho</button>
             </form>
             <button class="primary-btn disabled-btn" th:if="${relacionado.stock <= 0}">Indisponível</button>
           </div>
         </a>
-      
       </article>
-    
     </div>
   </section>
 

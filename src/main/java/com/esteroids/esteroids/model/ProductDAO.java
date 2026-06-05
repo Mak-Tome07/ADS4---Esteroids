@@ -42,7 +42,15 @@ public class ProductDAO {
     // RESEARCH
     public Product obterProduto(int id){
         String sql = "SELECT * FROM products WHERE id = ?";
-        return Product.converterRegistro((Map<String,Object>) jdbc.queryForMap(sql, id));
+    
+        try{
+            return Product.converterRegistro(
+                (Map<String,Object>) jdbc.queryForMap(sql, id)
+            );
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<Product> buscarProdutos(String search){
@@ -63,7 +71,7 @@ public class ProductDAO {
     }
 
     public List<Product> obterProdutosPorCategoria(Category category, int produtoAtualId){
-        String sql = "SELECT * FROM products WHERE category = ? AND id != ? LIMIT 4";
+        String sql = "SELECT * FROM products WHERE category = ? AND id != ? AND active = true LIMIT 4";
         List<Map<String,Object>> registros = jdbc.queryForList(sql, category.toString(), produtoAtualId);
         List<Product> lista = new ArrayList<>();
         for(Map<String,Object> registro : registros){
@@ -109,16 +117,21 @@ public class ProductDAO {
 
     // UPDATE
     public void atualizarProduto(int id, Product novo){
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ? WHERE id = ?";
-        Object[] obj = new Object[5];
+        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ?, image_url = ?, category = ?, active = ? WHERE id = ?";
+
+        Object[] obj = new Object[8];
+
         obj[0] = novo.getName();
         obj[1] = novo.getDescription();
         obj[2] = novo.getPrice();
         obj[3] = novo.getStock();
-        obj[4] = id;
+        obj[4] = novo.getImageUrl();
+        obj[5] = novo.getCategory().name();
+        obj[6] = novo.isActive();
+        obj[7] = id;
+
         jdbc.update(sql, obj);
     }
-
     // DELETE
     public void deletarProduto(int id){
         String sql = "DELETE FROM products WHERE id = ?";

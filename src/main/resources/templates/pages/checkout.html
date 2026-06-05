@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +19,7 @@
     <div class="mobile-menu" id="mobileMenu">
       <nav class="nav-links">
         <a th:href="@{shop}">Catálogo</a>
-        <a href="@{/cart}">Carrinho</a>
+        <a th:href="@{/cart}">Carrinho</a>
       </nav>
     </div>
     <button class="menu-toggle" id="menuToggle">☰</button>
@@ -28,7 +28,7 @@
   <!-- HEADER -->
 
   <section class="checkout-header">
-    <a href="@{/}" class="back-link">← Voltar para loja</a>
+    <a th:href="@{/}" class="back-link">← Voltar para loja</a>
     <h1>Checkout</h1>
     <p>Finalize sua compra com segurança.</p>
   </section>

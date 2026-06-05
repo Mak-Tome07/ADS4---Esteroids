@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteroids | Clientes</title>
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/admin.css">
-  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/assets/smile-svgrepo-com.svg}">
 </head>
 
 <body>
@@ -17,10 +17,10 @@
   <aside class="sidebar">
     <div class="logo">Esteroids</div>
     <nav class="sidebar-nav">
-      <a href="../pages/admin-dashboard.html">Dashboard</a>
-      <a href="../pages/products.html">Produtos</a>
-      <a href="../pages/orders.html">Pedidos</a>
-      <a href="../pages/customers.html" class="active">Clientes</a>
+      <a th:href="@{/admin/dashboard}">Dashboard</a>
+      <a th:href="@{/listar/produtos}">Produtos</a>
+      <a th:href="@{/listar/pedidos}">Pedidos</a>
+      <a th:href="@{/listar/usuarios}">Clientes</a>
     </nav>
     <button class="logout-btn">Logout</button>
   </aside>
@@ -128,6 +128,6 @@
       </table>
     </section>
   </main>
-  <script src="../js/main.js" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

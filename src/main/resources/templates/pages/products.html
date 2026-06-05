@@ -1,62 +1,46 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produtos</title>
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/admin.css">
-  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+  <title>Esteroids | Produtos</title>
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/admin.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/assets/smile-svgrepo-com.svg}">
 </head>
 
 <body>
 
-  <!-- SIDEBAR -->
-
   <aside class="sidebar">
     <div class="logo">Esteroids</div>
     <nav class="sidebar-nav">
-      <a href="../pages/admin-dashboard.html">Dashboard</a>
-      <a href="../pages/products.html" class="active">Produtos</a>
-      <a href="../pages/orders.html">Pedidos</a>
-      <a href="../pages/customers.html">Clientes</a>
+      <a th:href="@{/admin/dashboard}">Dashboard</a>
+      <a th:href="@{/listar/produtos}" class="active">Produtos</a>
+      <a th:href="@{/listar/pedidos}">Pedidos</a>
+      <a th:href="@{/listar/usuarios}">Clientes</a>
     </nav>
     <button class="logout-btn">Logout</button>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-  <!-- MAIN -->
-
   <main class="main-content">
-
-    <!-- TOPBAR -->
-
     <header class="topbar">
       <div class="topbar-left">
-        <button class="admin-menu-toggle" id="adminMenuToggle">☰</button>
         <h1>Produtos</h1>
         <p class="page-subtitle">Gerencie os produtos da loja.</p>
       </div>
-      <div class="admin-profile">
-        <div class="avatar"></div>
-        <span>Admin</span>
-      </div>
     </header>
-
-    <!-- PRODUCTS HEADER -->
 
     <section class="products-header">
       <div class="search-box">
         <input type="text" placeholder="Buscar produto...">
       </div>
-      <a href="../pages/product-form.html" class="primary-btn">+ Novo Produto</a>
+      <a th:href="@{/produto}" class="primary-btn">+ Novo Produto</a>
     </section>
 
-    <!-- PRODUCTS TABLE -->
-
-    <section class="table-container">
+    <section class="table-container" th:if="${not #lists.isEmpty(products)}">
       <table class="products-table">
         <thead>
           <tr>
@@ -69,44 +53,39 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
+          <tr th:each="produto : ${products}">
             <td>
-              <img src="../assets/The-Defiant.png" class="product-image">
+              <img th:src="${produto.imageUrl}" class="product-image" alt="Imagem do Produto">
             </td>
-            <td>The Defiant - Default</td>
-            <td>R$ 499,90</td>
-            <td>12</td>
+            <td th:text="${produto.name}"></td>
+            <td th:text="'R$ ' + ${produto.price}"></td>
+            <td th:text="${produto.stock}"></td>
             <td>
-              <span class="status active-status">Ativo</span>
-            </td>
-            <td>
-              <div class="actions">
-                <button class="edit-btn">Editar</button>
-                <button class="disable-btn">Desativar</button>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <img src="../assets/Crypto-Masters.png" class="product-image">
-            </td>
-            <td>Crypto Masters</td>
-            <td>R$ 419,90</td>
-            <td>0</td>
-            <td>
-              <span class="status inactive-status">Sem estoque</span>
+              <span th:if="${produto.active}" class="status active-status">Ativo</span>
+              <span th:unless="${produto.active}" class="status inactive-status">Inativo</span>
             </td>
             <td>
               <div class="actions">
-                <button class="edit-btn">Editar</button>
-                <button class="disable-btn">Desativar</button>
+                <a th:href="@{/produto/{id}/atualizar(id=${produto.id})}" class="edit-btn" style="text-decoration: none; text-align: center;">Editar</a>
+                <form th:action="@{/produto/{id}/deletar(id=${produto.id})}" method="post" style="display:inline;">
+                    <button type="submit" class="disable-btn">Deletar</button>
+                </form>
               </div>
             </td>
           </tr>
         </tbody>
       </table>
     </section>
+
+    <section class="table-container" th:if="${#lists.isEmpty(products)}" style="text-align: center; padding: 50px 20px;">
+        <div class="empty-state">
+            <p class="page-subtitle" style="font-size: 1.2rem; margin-bottom: 15px;">Nenhum produto cadastrado até o momento.</p>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Clique no botão "+ Novo Produto" acima para começar a abastecer o estoque de Esteroids!</p>
+        </div>
+    </section>
+
   </main>
-  <script src="../js/main.js" defer></script>
+
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

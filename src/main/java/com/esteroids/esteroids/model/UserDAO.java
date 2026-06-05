@@ -37,8 +37,15 @@ public class UserDAO {
 
     // RESEARCH
     public User obterUsuario(int id){
-        String sql = "SELECT * FROM usuario where id=?";
-        return User.converterRegistros((Map<String,Object>) jdbc.queryForMap(sql,id));
+        String sql = "SELECT * FROM usuario WHERE id = ?";
+    
+        try{
+            return User.converterRegistros(
+                (Map<String,Object>) jdbc.queryForMap(sql,id)
+            );
+        }catch(Exception e){
+            return null;
+        }
     }
 
     // UPDATE

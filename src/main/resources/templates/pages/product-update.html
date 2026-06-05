@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro Produto</title>
+  <title>Editar Produto</title>
   <link rel="stylesheet" th:href="@{/css/variables.css}">
   <link rel="stylesheet" th:href="@{/css/global.css}">
   <link rel="stylesheet" th:href="@{/css/admin.css}">
@@ -31,13 +31,13 @@
   <main class="main-content">
     <header class="topbar">
       <div class="topbar-left">
-        <h1>Novo Produto</h1>
-        <p class="page-subtitle">Cadastre um novo item da loja.</p>
+        <h1>Editar Produto</h1>
+        <p class="page-subtitle">Atualize os dados do produto.</p>
       </div>
     </header>
 
     <section class="form-card">
-      <form th:action="@{/produto}" th:object="${product}" method="post" enctype="multipart/form-data" class="product-form">
+      <form th:action="@{/produto/{id}/atualizar(id=${id})}" th:object="${product}" method="post" enctype="multipart/form-data" class="product-form">
         <div class="input-group">
           <label>Nome do Produto</label>
           <input type="text" th:field="*{name}" placeholder="Ex: Gojo Satoru Figure" required>
@@ -87,7 +87,7 @@
 
         <div class="form-actions">
           <a th:href="@{/listar/produtos}" class="secondary-btn" style="text-decoration: none; text-align: center; line-height: 2.5;">Cancelar</a>
-          <button type="submit" class="primary-btn">Salvar Produto</button>
+          <button type="submit" class="primary-btn">Atualizar Produto</button>
         </div>
       </form>
     </section>

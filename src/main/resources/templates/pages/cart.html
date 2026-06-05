@@ -22,10 +22,6 @@
         <a th:href="@{/#contato}">Contato</a>
       </nav>
       <div class="nav-actions">
-        <form th:action="@{/shop}" method="get" class="shop-search">
-          <input type="text" name="search" placeholder="Buscar produto...">
-          <button type="submit" class="secondary-btn">Buscar</button>
-        </form>
         <a th:href="@{/login}" class="secondary-btn auth-btn">Login</a>
       </div>
     </div>
@@ -37,7 +33,7 @@
   <section class="cart-header">
     <a th:href="@{/}" class="back-link">← Voltar para loja</a>
     <h1>Seu Carrinho</h1>
-    <p>Revise seus produtos antes do checkout./p>
+    <p>Revise seus produtos antes do checkout.</p>
   </section>
 
   <!-- CART LAYOUT -->
@@ -98,7 +94,7 @@
           <span th:text="${total + 29.90}"></span>
         </span>
       </div>
-      <a href="#" class="primary-btn checkout-btn">
+      <a th:href="@{/checkout}" class="primary-btn checkout-btn">
         Finalizar Compra
       </a>
     </aside>

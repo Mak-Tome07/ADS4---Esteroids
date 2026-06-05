@@ -12,7 +12,8 @@ public class User {
     private boolean active;
 
     public User() {
-
+        this.role = Role.CLIENTE;
+        this.active = true;
     }
 
     public User(String username, String email, String password) {

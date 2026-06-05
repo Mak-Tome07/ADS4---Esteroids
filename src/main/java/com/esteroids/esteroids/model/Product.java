@@ -110,7 +110,7 @@ public class Product {
         BigDecimal price = (BigDecimal) registro.get("price");
         int stock = (int) registro.get("stock");
         String imageUrl = (String) registro.get("image_url");
-        Category category = Category.valueOf((String) registro.get("category"));
+        Category category = Category.valueOf(((String) registro.get("category")).toUpperCase());
         boolean active = (boolean) registro.get("active");
 
         return new Product(id,name,description,price,stock,imageUrl,category,active);

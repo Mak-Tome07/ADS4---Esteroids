@@ -1,19 +1,19 @@
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     price NUMERIC(10,2) NOT NULL,
     stock INTEGER NOT NULL,
-    image_url TEXT,
-    category VARCHAR(25),
+    image_url TEXT NOT NULL,
+    category VARCHAR(25) NOT NULL,
     active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS usuario (
     id SERIAL PRIMARY KEY,
-    username VARCHAR(50),
-    email VARCHAR(50),
-    password VARCHAR(255),
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     role VARCHAR(20) DEFAULT 'CLIENTE',
     active BOOLEAN DEFAULT TRUE
 );
