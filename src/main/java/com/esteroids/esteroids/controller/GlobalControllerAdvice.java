@@ -3,10 +3,12 @@ package com.esteroids.esteroids.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.esteroids.esteroids.model.CartItem;
+import com.esteroids.esteroids.model.User;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -30,5 +32,11 @@ public class GlobalControllerAdvice {
         }
 
         return total;
+    }
+
+    @ModelAttribute
+    public void adicionarUsuario(Model model, HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        model.addAttribute("usuarioLogado", usuario);
     }
 }

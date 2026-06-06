@@ -30,4 +30,8 @@ public class UserService {
     public void deletarUsuario(int id){
         udao.deletarUsuario(id);
     }
+
+    public User buscarPorEmail(String email){
+        return udao.buscarPorEmail(email);
+    }
 }

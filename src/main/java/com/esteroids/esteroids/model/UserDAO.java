@@ -27,11 +27,15 @@ public class UserDAO {
 
     // CREATE
     public void inserirUsuario(User usuario){
-        String sql = "INSERT INTO usuario(username,email,password) VALUES(?,?,?)";
-        Object[] obj = new Object[3];
+        String sql = "INSERT INTO usuario(username,email,password,role,active) VALUES(?,?,?,?,?)";
+    
+        Object[] obj = new Object[5];
+
         obj[0] = usuario.getUsername();
         obj[1] = usuario.getEmail();
         obj[2] = usuario.getPassword();
+        obj[3] = usuario.getRole().name();
+        obj[4] = usuario.isActive();
         jdbc.update(sql,obj);
     }
 
@@ -73,5 +77,17 @@ public class UserDAO {
             aux.add(User.converterRegistros(registro));
         }
         return aux;
-    }    
+    }  
+
+    public User buscarPorEmail(String email){
+        String sql = "SELECT * FROM usuario WHERE email = ?";
+
+        try{
+            return User.converterRegistros(
+                (Map<String,Object>) jdbc.queryForMap(sql, email)
+            );
+        }catch(Exception e){
+            return null;
+        }
+    }  
 }

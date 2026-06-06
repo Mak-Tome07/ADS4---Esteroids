@@ -36,3 +36,9 @@ html{
 .back-link:hover{
   color:var(--primary);
 }
+
+.error-message{
+    color: #d32f2f !important;
+    margin-bottom: 1rem !important;
+    font-size: 0.9rem !important;
+}

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Esteroids Auth</title>
-  <link rel="stylesheet" href="../css/variables.css">
-  <link rel="stylesheet" href="../css/global.css">
-  <link rel="stylesheet" href="../css/auth.css">
-  <link rel="icon" type="image/svg+xml" href="../assets/smile-svgrepo-com.svg">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/auth.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
 <body>
   <main class="auth-container">
@@ -28,44 +28,47 @@
     <section class="auth-panel">
       <div class="auth-box">
         <div class="auth-header">
-          <a href="../pages/landing-page.html" class="back-link">← Voltar para loja</a>
+          <a th:href="@{/}" class="back-link">← Voltar para loja</a>
           <h2 id="form-title">Login</h2>
           <p>Entre para acessar sua conta.</p>
         </div>
 
         <!-- LOGIN -->
 
-        <form class="auth-form" id="login-form">
+        <form class="auth-form" id="login-form" th:action="@{/auth}" method="post">
           <div class="input-group">
             <label>Email</label>
-            <input type="email" placeholder="Digite seu email">
+            <input type="email" name="email" placeholder="Digite seu email" required>
           </div>
 
           <div class="input-group">
             <label>Senha</label>
-            <input type="password" placeholder="Digite sua senha">
+            <input type="password" name="password" placeholder="Digite sua senha" required>
+          </div>
+          <div th:if="${param.erro != null}" class="error-message">
+              Email ou senha inválidos.
           </div>
           <button class="primary-btn">Entrar</button>
         </form>
 
         <!-- SIGNUP -->
 
-        <form class="auth-form hidden" id="signup-form">
+        <form class="auth-form hidden" id="signup-form" th:action="@{/signup}" method="post">
           <div class="input-group">
             <label>Nome</label>
-            <input type="text" placeholder="Digite seu nome">
+            <input type="text" name="username" placeholder="Digite seu nome" required>
           </div>
           <div class="input-group">
             <label>Email</label>
-            <input type="email" placeholder="Digite seu email">
+            <input type="email" name="email" placeholder="Digite seu email" required>
           </div>
           <div class="input-group">
             <label>Senha</label>
-            <input type="password" placeholder="Crie uma senha">
+            <input type="password" name="password" placeholder="Crie uma senha" required>
           </div>
           <div class="input-group">
             <label>Confirmar senha</label>
-            <input type="password" placeholder="Repita sua senha">
+            <input type="password" name="confirmPassword" placeholder="Repita sua senha" required>
           </div>
           <button class="primary-btn">Criar Conta</button>
         </form>
@@ -79,6 +82,6 @@
       </div>
     </section>
   </main>
-  <script src="../js/main.js" defer></script>
+  <script th:src="@{/js/main.js}" defer></script>
 </body>
 </html>

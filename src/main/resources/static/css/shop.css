@@ -28,7 +28,70 @@ body{
   gap:40px;
 }
 
+/* NOTIFICAÇÃO DE SUCESSO (TOAST) */
+.success-message {
+  /* 1. Posicionamento fixo embaixo e centralizado */
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  /* O translate(-50%) garante o alinhamento horizontal perfeito */
+  transform: translate(-50%, 100px); 
+  
+  /* 2. Camada máxima para ficar acima de tudo (inclusive da navbar e popups) */
+  z-index: 1100; 
+  
+  /* 3. Estilização para ser bem perceptível e premium */
+  background: rgba(16, 185, 129, 0.95); /* Verde esmeralda moderno com leve opacidade */
+  color: #ffffff;
+  padding: 16px 28px;
+  border-radius: 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4); /* Brilho neon suave no fundo */
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  
+  /* Alinhamento interno do texto (pode adicionar um ícone depois se quiser) */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  opacity: 0;
 
+  /* 4. Executa a animação durante 5 segundos Cravados */
+  /* O 'forwards' faz a div manter o estado do último frame (sumida e sem cliques) */
+  animation: toastLifeCycle 5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* 5. Linha do Tempo da Animação (Entrar -> Ficar -> Sair) */
+@keyframes toastLifeCycle {
+  /* 0% a 8% (Primeiros 0.4 segundos): Entrada suave subindo */
+  0% {
+    transform: translate(-50%, 40px);
+    opacity: 0;
+    pointer-events: none; /* Evita cliques enquanto nasce */
+  }
+  8% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto; /* Ativa interações se precisar */
+  }
+  
+  /* 8% a 92% (Fica em exibição por ~4.2 segundos intacto) */
+  92% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* 92% a 100% (Últimos 0.4 segundos): Efeito fade-out descendo */
+  100% {
+    transform: translate(-50%, 20px);
+    opacity: 0;
+    pointer-events: none; /* Desativa totalmente para não bloquear botões da página */
+  }
+}
 
 .navbar{
 

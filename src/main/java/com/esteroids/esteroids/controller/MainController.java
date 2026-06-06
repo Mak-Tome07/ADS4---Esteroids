@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.esteroids.esteroids.model.CartItem;
 import com.esteroids.esteroids.model.Product;
 import com.esteroids.esteroids.model.ProductService;
+import com.esteroids.esteroids.model.Role;
 import com.esteroids.esteroids.model.User;
 import com.esteroids.esteroids.model.UserService;
 
@@ -75,7 +76,6 @@ public class MainController {
             }
         }
 
-        // LIMPO: Usando diretamente o atributo injetado da classe
         ps.inserirProduto(product); 
         return "redirect:/listar/produtos";
     }
@@ -104,7 +104,6 @@ public class MainController {
             return "redirect:/listar/produtos";
         }
         
-        // 2. Se o usuário enviou um novo arquivo, fazemos o upload dele
         if (file != null && !file.isEmpty()) {
             try {
                 String pastaUpload = System.getProperty("user.dir") + "/uploads/";
@@ -119,13 +118,11 @@ public class MainController {
                 Path caminhoCompleto = Paths.get(pastaUpload + nomeFinal);
                 Files.write(caminhoCompleto, file.getBytes());
 
-                // Define a nova imagem
                 product.setImageUrl("/uploads/" + nomeFinal);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            // 3. Caso ele NÃO tenha enviado uma foto nova, mantemos a URL que já existia no banco
             product.setImageUrl(produtoBanco.getImageUrl());
         }
         
@@ -140,7 +137,17 @@ public class MainController {
     }
 
     @GetMapping("/listar/produtos")
-    public String listarProdutos(Model model){
+    public String listarProdutos(HttpSession session, Model model){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+        
         List<Product> lista = ps.obterTodosProdutos();
         model.addAttribute("products", lista);
         return "pages/products";
@@ -148,15 +155,33 @@ public class MainController {
 
     // Adicione isto no MainController para abrir o Dashboard
     @GetMapping("/admin/dashboard")
-    public String dashboard(Model model) {
-        // Para a P2 pode deixar os números estáticos no HTML, 
-        // mas se quiser torná-los dinâmicos no futuro, passará os dados por aqui.
-        return "pages/dashboard"; // Certifique-se de que o HTML do Dashboard se chama "dashboard.html"
+    public String dashboard(HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+
+        return "pages/dashboard";
     }
 
     // Adicione isto no MainController para abrir os Pedidos
     @GetMapping("/listar/pedidos")
-    public String listarPedidos() {
+    public String listarPedidos(HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+
         return "pages/pedidos"; // Certifique-se de que o HTML de Pedidos se chama "pedidos.html"
     }
 
@@ -206,7 +231,17 @@ public class MainController {
     }
 
     @GetMapping("/listar/usuarios")
-    public String listarUsuarios(Model model){
+    public String listarUsuarios(HttpSession session, Model model){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+
         List<User> lista = us.obterTodosUsuarios();
         model.addAttribute("users", lista);
         return "pages/users";
@@ -259,7 +294,12 @@ public class MainController {
 
     @PostMapping("/cart/add/{id}")
     public String addToCart(@PathVariable int id, @RequestParam(defaultValue = "1") int quantity, HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
 
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        
         if(quantity <= 0){
             return "redirect:/shop";
         }
@@ -290,12 +330,17 @@ public class MainController {
         }
     
         session.setAttribute("cart", cart);
-        return "redirect:/cart";
+        return "redirect:/shop?adicionado=true";
     }
 
     @GetMapping("/cart")
     public String cart(HttpSession session, Model model){
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        User usuario = (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
 
         if(cart == null){
             cart = new ArrayList<>();
@@ -331,6 +376,12 @@ public class MainController {
     @GetMapping("/checkout")
     public String checkout(HttpSession session, Model model){
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        User usuario =
+        (User) session.getAttribute("usuarioLogado");
+
+        if(usuario == null){
+            return "redirect:/auth";
+        }
 
         if(cart == null){
             cart = new ArrayList<>();
@@ -350,5 +401,47 @@ public class MainController {
     public String finalizarCompra(HttpSession session){
         session.removeAttribute("cart");
         return "pages/success";
+    }
+
+    // ===========================
+    // CONTROLLERS DA AUTENTICAÇÃO
+    // ===========================
+
+    @GetMapping("/auth")
+    public String auth(){
+        return "pages/login";
+    }
+
+    @PostMapping("/signup")
+    public String signup(@RequestParam String username, @RequestParam String email, @RequestParam String password){
+
+        User user = new User();
+
+        user.setUsername(username);
+        user.setEmail(email);
+        user.setPassword(password);
+
+        us.inserirUsuario(user);
+
+        return "redirect:/auth";
+    }
+
+    @PostMapping("/auth")
+    public String login(@RequestParam String email, @RequestParam String password, HttpSession session){
+        User user = us.buscarPorEmail(email);
+
+        if(user == null || !user.getPassword().equals(password)){
+            return "redirect:/auth?erro=login";
+        }
+
+        session.setAttribute("usuarioLogado", user);
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "redirect:/";
     }
 }
