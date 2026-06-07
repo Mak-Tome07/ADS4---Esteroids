@@ -83,12 +83,11 @@ public class User {
 
     public static User converterRegistros(Map<String,Object> registros){
         int id = (int) registros.get("id");
-        String username = (String) registros.get("username");
+        String username = (String) registros.get("nome_usuario");
         String email = (String) registros.get("email");
-        String password = (String) registros.get("password");
+        String password = (String) registros.get("senha");
         Role role = Role.valueOf((String) registros.get("role"));
-        Boolean active = (Boolean) registros.get("active");
-
+        Boolean active = (Boolean) registros.get("ativo");
         return new User(id,username,email,password,role,active != null ? active : false);
     }
 }

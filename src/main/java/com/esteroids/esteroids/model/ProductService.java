@@ -45,4 +45,12 @@ public class ProductService {
     public List<Product> obterProdutosPorCategoria(Category category, int produtoAtualId){
         return pdao.obterProdutosPorCategoria(category, produtoAtualId);
     }
+
+    public void baixarEstoque(int produtoId, int quantidade){
+        pdao.baixarEstoque(produtoId, quantidade);
+    }
+
+    public long contarProdutosSemEstoque(){
+        return pdao.obterTodosProdutos().stream().filter(p -> p.getStock() <= 0).count();
+    }
 }

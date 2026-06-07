@@ -105,14 +105,13 @@ public class Product {
 
     public static Product converterRegistro(Map<String,Object> registro) {
         int id = (int) registro.get("id");
-        String name = (String) registro.get("name");
-        String description = (String) registro.get("description");
-        BigDecimal price = (BigDecimal) registro.get("price");
-        int stock = (int) registro.get("stock");
-        String imageUrl = (String) registro.get("image_url");
-        Category category = Category.valueOf(((String) registro.get("category")).toUpperCase());
-        boolean active = (boolean) registro.get("active");
-
+        String name = (String) registro.get("nome");
+        String description = (String) registro.get("descricao");
+        BigDecimal price = (BigDecimal) registro.get("preco");
+        int stock = (int) registro.get("estoque");
+        String imageUrl = (String) registro.get("imagem_url");
+        Category category = Category.valueOf(((String) registro.get("categoria")).toUpperCase());
+        boolean active = (boolean) registro.get("ativo");
         return new Product(id,name,description,price,stock,imageUrl,category,active);
     }
 }

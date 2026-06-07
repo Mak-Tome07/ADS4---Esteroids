@@ -2,9 +2,11 @@ package com.esteroids.esteroids.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.esteroids.esteroids.model.CartItem;
+import com.esteroids.esteroids.model.Order;
+import com.esteroids.esteroids.model.OrderDAO;
+import com.esteroids.esteroids.model.OrderItem;
+import com.esteroids.esteroids.model.OrderItemDAO;
+import com.esteroids.esteroids.model.OrderService;
+import com.esteroids.esteroids.model.OrderStatus;
 import com.esteroids.esteroids.model.Product;
 import com.esteroids.esteroids.model.ProductService;
 import com.esteroids.esteroids.model.Role;
@@ -35,6 +43,9 @@ public class MainController {
     
     @Autowired
     private UserService us;
+
+    @Autowired
+    private OrderService os;
 
     @GetMapping("/")
     public String index(Model model){
@@ -63,10 +74,8 @@ public class MainController {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-
                 String nomeOriginal = file.getOriginalFilename();
                 String nomeFinal = System.currentTimeMillis() + "_" + nomeOriginal;
-
                 Path caminhoCompleto = Paths.get(pastaUpload + nomeFinal);
                 Files.write(caminhoCompleto, file.getBytes());
 
@@ -75,35 +84,27 @@ public class MainController {
                 e.printStackTrace();
             }
         }
-
         ps.inserirProduto(product); 
         return "redirect:/listar/produtos";
     }
     
     @GetMapping("/produto/{id}/atualizar")
     public String formAtualizarProduto(Model model, @PathVariable int id){
-
         Product produtoAntigo = ps.obterProduto(id);
-
         if(produtoAntigo == null){
             return "redirect:/listar/produtos";
         }
-
         model.addAttribute("id", id);
         model.addAttribute("product", produtoAntigo);
-
         return "pages/product-update";
     }
 
     @PostMapping("/produto/{id}/atualizar")
     public String atualizarProduto(@PathVariable int id, @ModelAttribute Product product, @RequestParam(value = "imagemArquivo", required = false) MultipartFile file){
-
         Product produtoBanco = ps.obterProduto(id);
-
         if(produtoBanco == null){
             return "redirect:/listar/produtos";
         }
-        
         if (file != null && !file.isEmpty()) {
             try {
                 String pastaUpload = System.getProperty("user.dir") + "/uploads/";
@@ -111,13 +112,10 @@ public class MainController {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-
                 String nomeOriginal = file.getOriginalFilename();
                 String nomeFinal = System.currentTimeMillis() + "_" + nomeOriginal;
-
                 Path caminhoCompleto = Paths.get(pastaUpload + nomeFinal);
                 Files.write(caminhoCompleto, file.getBytes());
-
                 product.setImageUrl("/uploads/" + nomeFinal);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -125,7 +123,6 @@ public class MainController {
         } else {
             product.setImageUrl(produtoBanco.getImageUrl());
         }
-        
         ps.atualizarProduto(id, product);
         return "redirect:/listar/produtos";
     }
@@ -139,54 +136,49 @@ public class MainController {
     @GetMapping("/listar/produtos")
     public String listarProdutos(HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-        
         List<Product> lista = ps.obterTodosProdutos();
         model.addAttribute("products", lista);
         return "pages/products";
     }
 
-    // Adicione isto no MainController para abrir o Dashboard
     @GetMapping("/admin/dashboard")
-    public String dashboard(HttpSession session){
+    public String dashboard(HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-
+        model.addAttribute("totalProdutos",ps.obterTodosProdutos().size());
+        model.addAttribute("totalPedidos",os.obterTodosPedidos().size());
+        model.addAttribute("totalUsuarios",us.obterTodosUsuarios().size());
+        model.addAttribute("semEstoque",ps.contarProdutosSemEstoque());
+        model.addAttribute("receitaTotal",os.calcularReceitaTotal());
         return "pages/dashboard";
     }
 
-    // Adicione isto no MainController para abrir os Pedidos
     @GetMapping("/listar/pedidos")
-    public String listarPedidos(HttpSession session){
+    public String listarPedidos(HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-
-        return "pages/pedidos"; // Certifique-se de que o HTML de Pedidos se chama "pedidos.html"
+        model.addAttribute("pedidos",os.obterPedidosAdmin());
+        return "pages/pedidos";
     }
 
     // ======================
-    // CONTROLLERS DO USUARIO (LIMPOS SEM GETBEAN)
+    // CONTROLLERS DO USUARIO
     // ======================
 
     @GetMapping("/usuario")
@@ -197,30 +189,22 @@ public class MainController {
 
     @GetMapping("/usuario/{id}/atualizar")
     public String formupdUsuario(Model model, @PathVariable int id){
-
         User usuarioAntigo = us.obterUsuario(id);
-
         if(usuarioAntigo == null){
             return "redirect:/listar/usuarios";
         }
-
         model.addAttribute("id", id);
         model.addAttribute("user", usuarioAntigo);
-
         return "pages/user-update";
     }
 
     @PostMapping("/usuario/{id}/atualizar")
     public String atualizarUsuario(@PathVariable int id, @ModelAttribute User user){
-
         User usuarioBanco = us.obterUsuario(id);
-
         if(usuarioBanco == null){
             return "redirect:/listar/usuarios";
         }
-
         us.atualizarUsuario(id, user);
-
         return "redirect:/listar/usuarios";
     }
 
@@ -233,15 +217,12 @@ public class MainController {
     @GetMapping("/listar/usuarios")
     public String listarUsuarios(HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-
         List<User> lista = us.obterTodosUsuarios();
         model.addAttribute("users", lista);
         return "pages/users";
@@ -258,10 +239,7 @@ public class MainController {
     // ===================
     
     @GetMapping("/shop")
-    public String shop(@RequestParam(required = false) String search,
-                       @RequestParam(required = false) String category,
-                       @RequestParam(required = false) Boolean inStock,
-                       Model model){
+    public String shop(@RequestParam(required = false) String search, @RequestParam(required = false) String category, @RequestParam(required = false) Boolean inStock, Model model){
         List<Product> produtos = ps.filtrarProdutos(search, category, inStock);
         model.addAttribute("products", produtos);
         model.addAttribute("categorias", ps.obterCategorias());
@@ -271,20 +249,12 @@ public class MainController {
     @GetMapping("/produto/{id}")
     public String productDetails(@PathVariable int id, Model model){
         Product produto = ps.obterProduto(id);
-
         if(produto == null){
             return "redirect:/shop";
         }
-        
-        List<Product> relacionados =
-            ps.obterProdutosPorCategoria(
-                produto.getCategory(),
-                produto.getId()
-            );
-
+        List<Product> relacionados = ps.obterProdutosPorCategoria(produto.getCategory(),produto.getId());
         model.addAttribute("produto", produto);
         model.addAttribute("relacionados", relacionados);
-
         return "pages/product-details";
     }
 
@@ -295,27 +265,20 @@ public class MainController {
     @PostMapping("/cart/add/{id}")
     public String addToCart(@PathVariable int id, @RequestParam(defaultValue = "1") int quantity, HttpSession session){
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-        
         if(quantity <= 0){
             return "redirect:/shop";
         }
-
         Product produto = ps.obterProduto(id);
-
         if(produto == null){
             return "redirect:/shop";
         }
-
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-
         if(cart == null){
             cart = new ArrayList<>();
         }
-    
         boolean encontrado = false;
         for(CartItem item : cart){
             if(item.getProduct().getId() == id){
@@ -324,11 +287,9 @@ public class MainController {
                 break;
             }
         }
-    
         if(!encontrado){
             cart.add(new CartItem(produto, quantity));
         }
-    
         session.setAttribute("cart", cart);
         return "redirect:/shop?adicionado=true";
     }
@@ -337,20 +298,16 @@ public class MainController {
     public String cart(HttpSession session, Model model){
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         User usuario = (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(cart == null){
             cart = new ArrayList<>();
         }
-
         java.math.BigDecimal total = java.math.BigDecimal.ZERO;
         for(CartItem item : cart){
             total = total.add(item.getSubtotal());
         }
-
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
         return "pages/cart";
@@ -358,14 +315,11 @@ public class MainController {
 
     @PostMapping("/cart/remove/{id}")
     public String removeFromCart(@PathVariable int id, HttpSession session){
-
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-
         if(cart != null){
             cart.removeIf(item -> item.getProduct().getId() == id);
             session.setAttribute("cart", cart);
         }
-
         return "redirect:/cart";
     }
 
@@ -378,20 +332,16 @@ public class MainController {
         List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
         User usuario =
         (User) session.getAttribute("usuarioLogado");
-
         if(usuario == null){
             return "redirect:/auth";
         }
-
         if(cart == null){
             cart = new ArrayList<>();
         }
-
         java.math.BigDecimal total = java.math.BigDecimal.ZERO;
         for(CartItem item : cart){
             total = total.add(item.getSubtotal());
         }
-
         model.addAttribute("cart", cart);
         model.addAttribute("total", total);
         return "pages/checkout";
@@ -399,8 +349,46 @@ public class MainController {
 
     @PostMapping("/checkout")
     public String finalizarCompra(HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        List<CartItem> cart =
+            (List<CartItem>) session.getAttribute("cart");
+
+        if(cart == null || cart.isEmpty()){
+            return "redirect:/cart";
+        }
+        for(CartItem item : cart){
+            Product produto = ps.obterProduto(item.getProduct().getId());
+            if(produto.getStock() < item.getQuantity()){
+                return "redirect:/cart";
+            }
+        }
+        BigDecimal total = BigDecimal.ZERO;
+        List<OrderItem> itensPedido = new ArrayList<>();
+        for(CartItem cartItem : cart){
+            total = total.add(cartItem.getSubtotal());
+            OrderItem item = new OrderItem();
+            item.setProductId(cartItem.getProduct().getId());
+            item.setQuantity(cartItem.getQuantity());
+            item.setUnitPrice(cartItem.getProduct().getPrice());
+            itensPedido.add(item);
+        }
+        Order pedido = new Order();
+        pedido.setUserId(usuario.getId());
+        pedido.setCreatedAt(LocalDateTime.now());
+        pedido.setTotal(total);
+        pedido.setStatus(OrderStatus.PENDENTE);
+        os.criarPedido(pedido,itensPedido);
+        for(OrderItem item : itensPedido){
+            ps.baixarEstoque(
+                item.getProductId(),
+                item.getQuantity()
+            );
+        }
         session.removeAttribute("cart");
-        return "pages/success";
+        return "redirect:/sucesso";
     }
 
     // ===========================
@@ -414,28 +402,27 @@ public class MainController {
 
     @PostMapping("/signup")
     public String signup(@RequestParam String username, @RequestParam String email, @RequestParam String password){
-
         User user = new User();
-
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
-
         us.inserirUsuario(user);
-
         return "redirect:/auth";
     }
 
     @PostMapping("/auth")
     public String login(@RequestParam String email, @RequestParam String password, HttpSession session){
         User user = us.buscarPorEmail(email);
-
         if(user == null || !user.getPassword().equals(password)){
             return "redirect:/auth?erro=login";
         }
 
-        session.setAttribute("usuarioLogado", user);
+        if(user.getRole() == Role.ADMIN){
+            session.setAttribute("usuarioLogado", user);
+            return "redirect:/admin/dashboard";
+        }
 
+        session.setAttribute("usuarioLogado", user);
         return "redirect:/";
     }
 
@@ -443,5 +430,94 @@ public class MainController {
     public String logout(HttpSession session){
         session.invalidate();
         return "redirect:/";
+    }
+
+    // =======================
+    // CONTROLLERS DOS PEDIDOS
+    // =======================
+
+    @GetMapping("/meus-pedidos")
+    public String meusPedidos(HttpSession session, Model model){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        model.addAttribute("pedidos",os.obterPedidosPorUsuario(usuario.getId()));
+        return "pages/meus-pedidos";
+    }
+
+    @GetMapping("/pedido/{id}")
+    public String detalhesPedido(@PathVariable int id, HttpSession session, Model model){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        Order pedido = os.obterPedido(id);
+        if(pedido == null){
+            return "redirect:/meus-pedidos";
+        }
+        if(pedido.getUserId() != usuario.getId()){
+            return "redirect:/meus-pedidos";
+        }
+        List<OrderItem> itens = os.obterItensPorPedido(id);
+        List<Product> produtos = new ArrayList<>();
+        for(OrderItem item : itens){
+            produtos.add(
+                ps.obterProduto(item.getProductId())
+            );
+        }
+        model.addAttribute("pedido", pedido);
+        model.addAttribute("itens", itens);
+        model.addAttribute("produtos", produtos);
+        return "pages/pedido-detalhes";
+    }
+
+    @GetMapping("/admin/pedido/{id}")
+    public String adminDetalhesPedido(@PathVariable int id, HttpSession session, Model model){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+        Order pedido = os.obterPedido(id);
+        if(pedido == null){
+            return "redirect:/listar/pedidos";
+        }
+        List<OrderItem> itens = os.obterItensPorPedido(id);
+        List<Product> produtos = new ArrayList<>();
+        for(OrderItem item : itens){
+            produtos.add(
+                ps.obterProduto(
+                    item.getProductId()
+                )
+            );
+        }
+        User cliente = us.obterUsuario(pedido.getUserId());
+        model.addAttribute("pedido", pedido);
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("itens", itens);
+        model.addAttribute("produtos", produtos);
+        return "pages/admin-pedido-detalhes";
+    }
+
+    @PostMapping("/admin/pedido/{id}/status")
+    public String atualizarStatusPedido(@PathVariable int id, @RequestParam OrderStatus status, HttpSession session){
+        User usuario = (User) session.getAttribute("usuarioLogado");
+        if(usuario == null){
+            return "redirect:/auth";
+        }
+        if(usuario.getRole() != Role.ADMIN){
+            return "redirect:/";
+        }
+        os.atualizarStatus(id, status);
+        return "redirect:/admin/pedido/" + id;
+    }
+
+    @GetMapping("/sucesso")
+    public String sucesso(){
+        return "pages/sucesso";
     }
 }

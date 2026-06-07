@@ -27,7 +27,7 @@ public class UserDAO {
 
     // CREATE
     public void inserirUsuario(User usuario){
-        String sql = "INSERT INTO usuario(username,email,password,role,active) VALUES(?,?,?,?,?)";
+        String sql = "INSERT INTO usuario(nome_usuario,email,senha,role,ativo) VALUES(?,?,?,?,?)";
     
         Object[] obj = new Object[5];
 
@@ -54,7 +54,7 @@ public class UserDAO {
 
     // UPDATE
     public void atualizarUsuario(int id, User novo){
-        String sql = "UPDATE usuario SET username = ?, email = ?, password = ? where id = ?";
+        String sql = "UPDATE usuario SET nome_usuario = ?, email = ?, senha = ? where id = ?";
         Object[] obj = new Object[4];
         obj[0] = novo.getUsername();
         obj[1] = novo.getEmail();
@@ -89,5 +89,7 @@ public class UserDAO {
         }catch(Exception e){
             return null;
         }
-    }  
+    }
+
+    
 }

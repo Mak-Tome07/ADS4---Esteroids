@@ -21,7 +21,7 @@
       <a th:href="@{/listar/pedidos}">Pedidos</a>
       <a th:href="@{/listar/usuarios}">Clientes</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+    <a th:if="${session.usuarioLogado != null}" th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="logout-btn">Sair</a>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -43,19 +43,23 @@
     <section class="metrics-grid">
       <div class="metric-card">
         <span>Total Produtos</span>
-        <h2>124</h2>
+        <h2 th:text="${totalProdutos}"></h2>
       </div>
       <div class="metric-card">
         <span>Pedidos</span>
-        <h2>57</h2>
+        <h2 th:text="${totalPedidos}"></h2>
       </div>
       <div class="metric-card">
         <span>Receita</span>
-        <h2>R$ 12.450</h2>
+        <h2>R$ <span th:text="${receitaTotal}"></span></h2>
       </div>
       <div class="metric-card">
         <span>Sem Estoque</span>
-        <h2>8</h2>
+        <h2 th:text="${semEstoque}"></h2>
+      </div>
+      <div class="metric-card">
+          <span>Clientes</span>
+          <h2 th:text="${totalUsuarios}"></h2>
       </div>
     </section>
   </main>

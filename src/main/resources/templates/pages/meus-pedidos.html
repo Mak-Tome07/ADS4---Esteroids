@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esteroids | Meus Pedidos</title>
+    <link rel="stylesheet" th:href="@{/css/variables.css}">
+    <link rel="stylesheet" th:href="@{/css/global.css}">
+    <link rel="stylesheet" th:href="@{/css/shop.css}">
+</head>
+<body>
+<header class="navbar">
+    <div class="logo">Esteroids</div>
+    <div class="mobile-menu" id="mobileMenu">
+        <nav class="nav-links">
+            <a th:href="@{/}">Home</a>
+            <a th:href="@{/shop}">Catálogo</a>
+        </nav>
+        <div class="nav-actions">
+            <span class="user-greeting">
+                Olá, <strong th:text="${session.usuarioLogado.username}"></strong>
+            </span>
+            <a th:href="@{/cart}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
+            <a th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="secondary-btn auth-btn">Sair</a>
+        </div>
+    </div>
+    <button class="menu-toggle" id="menuToggle">☰</button>
+</header>
+<section class="cart-header">
+    <a th:href="@{/}" class="back-link">← Voltar para loja</a>
+    <h1>Meus Pedidos</h1>
+    <p>Acompanhe suas compras realizadas.</p>
+</section>
+<main class="container">
+    <div th:if="${#lists.isEmpty(pedidos)}" class="empty-state">
+        <h2>Nenhum pedido encontrado</h2>
+        <p>Você ainda não realizou nenhuma compra.</p>
+        <a th:href="@{/shop}" class="primary-btn">Ir para o catálogo</a>
+    </div>
+    <section class="orders-list" th:unless="${#lists.isEmpty(pedidos)}">
+        <article class="order-card" th:each="pedido : ${pedidos}">
+            <div class="order-header">
+                <div>
+                    <small>Pedido</small>
+                    <h3>#<span th:text="${pedido.id}"></span></h3>
+                </div>
+                <div>
+                    <small>Data</small>
+                    <p th:text="${#temporals.format(pedido.createdAt,'dd/MM/yyyy HH:mm')}"></p>
+                </div>
+            </div>
+            <div class="order-body">
+                <div class="order-info">
+                    <span>Total</span>
+                    <strong>R$<span th:text="${pedido.total}"></span></strong>
+                </div>
+                <div class="order-info">
+                    <span>Status</span>
+                    <span class="status-badge" th:text="${pedido.status}"></span>
+                </div>
+            </div>
+            <div class="order-footer">
+                <a th:href="@{'/pedido/' + ${pedido.id}}" class="primary-btn">Ver Detalhes</a>
+            </div>
+        </article>
+    </section>
+</main>
+<script th:src="@{/js/main.js}" defer></script>
+</body>
+</html>

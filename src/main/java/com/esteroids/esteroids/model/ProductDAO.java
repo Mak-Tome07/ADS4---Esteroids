@@ -27,7 +27,7 @@ public class ProductDAO {
 
     // INSERT
     public void inserirProduto(Product product) {
-        String sql = "INSERT INTO products(name,description,price,stock,image_url,category,active) VALUES(?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO produto(nome,descricao,preco,estoque,imagem_url,categoria,ativo) VALUES(?,?,?,?,?,?,?)";
         Object[] obj = new Object[7];
         obj[0] = product.getName();
         obj[1] = product.getDescription();
@@ -41,7 +41,7 @@ public class ProductDAO {
 
     // RESEARCH
     public Product obterProduto(int id){
-        String sql = "SELECT * FROM products WHERE id = ?";
+        String sql = "SELECT * FROM produto WHERE id = ?";
     
         try{
             return Product.converterRegistro(
@@ -54,7 +54,7 @@ public class ProductDAO {
     }
 
     public List<Product> buscarProdutos(String search){
-        String sql = "SELECT * FROM products " + "WHERE LOWER(name) LIKE LOWER(?)";
+        String sql = "SELECT * FROM produto " + "WHERE LOWER(nome) LIKE LOWER(?)";
         List<Map<String,Object>> registros = jdbc.queryForList(sql, "%" + search + "%");
         List<Product> lista = new ArrayList<>();
 
@@ -66,12 +66,12 @@ public class ProductDAO {
     }
 
     public List<String> obterCategorias(){
-        String sql = "SELECT DISTINCT category " + "FROM products " + "WHERE category IS NOT NULL";
+        String sql = "SELECT DISTINCT categoria " + "FROM produto " + "WHERE categoria IS NOT NULL";
         return jdbc.queryForList(sql, String.class);
     }
 
     public List<Product> obterProdutosPorCategoria(Category category, int produtoAtualId){
-        String sql = "SELECT * FROM products WHERE category = ? AND id != ? AND active = true LIMIT 4";
+        String sql = "SELECT * FROM produto WHERE categoria = ? AND id != ? AND ativo = true LIMIT 4";
         List<Map<String,Object>> registros = jdbc.queryForList(sql, category.toString(), produtoAtualId);
         List<Product> lista = new ArrayList<>();
         for(Map<String,Object> registro : registros){
@@ -81,21 +81,21 @@ public class ProductDAO {
     }
 
     public List<Product> filtrarProdutos(String search,String category,Boolean inStock){
-        StringBuilder sql = new StringBuilder("SELECT * FROM products WHERE active = true");
+        StringBuilder sql = new StringBuilder("SELECT * FROM produto WHERE ativo = true");
         List<Object> params = new ArrayList<>();
 
         if(search != null && !search.isBlank()){
-            sql.append(" AND LOWER(name) LIKE LOWER(?)");
+            sql.append(" AND LOWER(nome) LIKE LOWER(?)");
             params.add("%" + search + "%");
         }
 
         if(category != null && !category.isBlank()){
-            sql.append(" AND category = ?");
+            sql.append(" AND categoria = ?");
             params.add(category);
         }
 
         if(inStock != null && inStock){
-            sql.append(" AND stock > 0");
+            sql.append(" AND estoque > 0");
         }
 
         List<Map<String,Object>> registros =
@@ -117,7 +117,7 @@ public class ProductDAO {
 
     // UPDATE
     public void atualizarProduto(int id, Product novo){
-        String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ?, image_url = ?, category = ?, active = ? WHERE id = ?";
+        String sql = "UPDATE produto SET nome = ?, descricao = ?, preco = ?, estoque = ?, imagem_url = ?, categoria = ?, ativo = ? WHERE id = ?";
 
         Object[] obj = new Object[8];
 
@@ -134,18 +134,28 @@ public class ProductDAO {
     }
     // DELETE
     public void deletarProduto(int id){
-        String sql = "DELETE FROM products WHERE id = ?";
+        String sql = "DELETE FROM produto WHERE id = ?";
         jdbc.update(sql, id);
     }
 
     // SELECT ALL
     public List<Product> obterTodosProdutos() {        
-        String sql = "SELECT * FROM products";
+        String sql = "SELECT * FROM produto";
         List<Map<String,Object>> registros = jdbc.queryForList(sql);
         ArrayList<Product> lista = new ArrayList<>();
         for(Map<String,Object> registro : registros){
             lista.add(Product.converterRegistro(registro));
         }
         return lista;
+    }
+
+    public void baixarEstoque(int produtoId, int quantidade){
+        String sql = "UPDATE produto SET estoque = estoque - ? WHERE id = ?";
+        jdbc.update(sql, quantidade, produtoId);
+    }
+
+    public int obterEstoque(int produtoId){
+        String sql = "SELECT estoque FROM produto WHERE id = ?";
+        return jdbc.queryForObject(sql,Integer.class,produtoId);
     }
 }

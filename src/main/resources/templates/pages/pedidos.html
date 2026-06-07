@@ -16,12 +16,12 @@
   <aside class="sidebar">
     <div class="logo">Esteroids</div>
     <nav class="sidebar-nav">
-      <a th:href="@{/admin/dashboard}" class="active">Dashboard</a>
+      <a th:href="@{/admin/dashboard}">Dashboard</a>
       <a th:href="@{/listar/produtos}">Produtos</a>
-      <a th:href="@{/listar/pedidos}">Pedidos</a>
+      <a th:href="@{/listar/pedidos}" class="active">Pedidos</a>
       <a th:href="@{/listar/usuarios}">Clientes</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+    <a th:if="${session.usuarioLogado != null}" th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="logout-btn">Sair</a>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -78,51 +78,15 @@
 
           <!-- ORDER -->
 
-          <tr>
-            <td>#1024</td>
-            <td>Ernesto</td>
-            <td>16/04/2026</td>
-            <td>
-              <span class="status pending-status">Pendente</span>
-            </td>
-            <td>R$ 949,50</td>
+          <tr th:each="pedido : ${pedidos}">
+            <td th:text="'#' + ${pedido.id}"></td>
+            <td th:text="${pedido.customerName}"></td>
+            <td th:text="${pedido.createdAt}"></td>
+            <td th:text="${pedido.status}"></td>
+            <td th:text="'R$ ' + ${pedido.total}"></td>
             <td>
               <div class="actions">
-                <button class="edit-btn">Detalhes</button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- ORDER -->
-
-          <tr>
-            <td>#1025</td>
-            <td>Lucas</td>
-            <td>16/04/2026</td>
-            <td>
-              <span class="status success-status">Pago</span>
-            </td>
-            <td>R$ 499,90</td>
-            <td>
-              <div class="actions">
-                <button class="edit-btn">Detalhes</button>
-              </div>
-            </td>
-          </tr>
-
-          <!-- ORDER -->
-
-          <tr>
-            <td>#1026</td>
-            <td>Amanda</td>
-            <td>15/04/2026</td>
-            <td>
-              <span class="status shipped-status">Enviado</span>
-            </td>
-            <td>R$ 1299,90</td>
-            <td>
-              <div class="actions">
-                <button class="edit-btn">Detalhes</button>
+                <a th:href="@{'/pedido/' + ${pedido.id}}" class="edit-btn">Detalhes</a>
               </div>
             </td>
           </tr>

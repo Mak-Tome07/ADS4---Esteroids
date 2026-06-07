@@ -20,9 +20,9 @@
       <a th:href="@{/admin/dashboard}">Dashboard</a>
       <a th:href="@{/listar/produtos}">Produtos</a>
       <a th:href="@{/listar/pedidos}">Pedidos</a>
-      <a th:href="@{/listar/usuarios}">Clientes</a>
+      <a th:href="@{/listar/usuarios}" class="active">Clientes</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+   <a th:if="${session.usuarioLogado != null}" th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="logout-btn">Sair</a>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -77,53 +77,27 @@
 
           <!-- CUSTOMER -->
 
-          <tr>
+          <tr th:each="user : ${users}">
             <td>
               <div class="customer-cell">
-                <div class="customer-avatar">E</div>
-                <div>
-                  <strong>Ernesto</strong>
-                </div>
+                 <div class="customer-avatar" th:text="${#strings.substring(user.username,0,1)}"></div>
+                 <div><strong th:text="${user.username}"></strong></div>
               </div>
             </td>
-            <td>ernesto@email.com</td>
-            <td>12</td>
-            <td>
-              <span class="status active-status">Ativo</span>
+            <td th:text="${user.email}"></td>
+            <th>Perfil</th>
+            <td th:text="${user.role}"></td>
+            <td>     
+              <span th:if="${user.active}" class="status active-status">Ativo</span>
+                <span th:unless="${user.active}" class="status inactive-status">Bloqueado</span>
             </td>
-            <td>12/04/2026</td>
-            <td>
+            <td>       
               <div class="actions">
-                <button class="edit-btn">Visualizar</button>
-                <button class="disable-btn">Bloquear</button>
+                <button class="edit-btn" disabled>Visualizar</button>
               </div>
             </td>
           </tr>
-
-          <!-- CUSTOMER -->
-
-          <tr>
-            <td>
-              <div class="customer-cell">
-                <div class="customer-avatar">L</div>
-                <div>
-                  <strong>Lucas</strong>
-                </div>
-              </div>
-            </td>
-            <td>lucas@email.com</td>
-            <td>4</td>
-            <td>
-              <span class="status inactive-status">Bloqueado</span>
-            </td>
-            <td>02/03/2026</td>
-            <td>
-              <div class="actions">
-                <button class="edit-btn">Visualizar</button>
-                <button class="secondary-btn">Desbloquear</button>
-              </div>
-            </td>
-          </tr>
+          <a th:href="@{'/admin/usuario/editar/' + ${user.id}}">Editar</a>
         </tbody>
       </table>
     </section>

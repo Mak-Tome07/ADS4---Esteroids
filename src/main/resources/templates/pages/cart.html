@@ -24,6 +24,7 @@
       <div class="nav-actions">
           <a th:if="${session.usuarioLogado == null}" th:href="@{/auth}" class="secondary-btn auth-btn">Entrar</a>
           <span th:if="${session.usuarioLogado != null}" class="user-greeting">Olá, <strong th:text="${session.usuarioLogado.username}"></strong></span>
+          <a th:if="${session.usuarioLogado != null}" th:href="@{/meus-pedidos}">Meus Pedidos</a>
           <a th:if="${session.usuarioLogado != null}" th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="secondary-btn auth-btn">Sair</a>
           <a th:if="${session.usuarioLogado != null}" th:href="@{/cart}" class="cart-btn">Carrinho (<span th:text="${cartQuantity}"></span>)</a>
       </div>
@@ -97,9 +98,11 @@
           <span th:text="${total + 29.90}"></span>
         </span>
       </div>
-      <a th:href="@{/checkout}" class="primary-btn checkout-btn">
-        Finalizar Compra
-      </a>
+      <form th:action="@{/checkout}" method="post">
+          <button type="submit" class="primary-btn">
+              Finalizar Compra
+          </button>
+      </form>
     </aside>
   </main>
   <script th:src="@{/js/main.js}" defer></script>

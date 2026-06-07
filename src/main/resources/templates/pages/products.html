@@ -20,7 +20,7 @@
       <a th:href="@{/listar/pedidos}">Pedidos</a>
       <a th:href="@{/listar/usuarios}">Clientes</a>
     </nav>
-    <button class="logout-btn">Logout</button>
+    <a th:if="${session.usuarioLogado != null}" th:href="@{/logout}" onclick="return confirm('Deseja sair?')" class="logout-btn">Sair</a>
   </aside>
 
   <div class="sidebar-overlay" id="sidebarOverlay"></div>
