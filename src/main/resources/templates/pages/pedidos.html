@@ -46,18 +46,18 @@
 
     <!-- FILTERS -->
 
-    <section class="products-header">
+    <form class="products-header" method="get" th:action="@{/listar/pedidos}">
       <div class="search-box">
-        <input type="text" placeholder="Buscar pedido...">
+        <input type="text" name="busca" placeholder="Buscar pedido..." th:value="${busca}">
       </div>
-      <select class="filter-select">
-        <option>Todos Status</option>
-        <option>Pendente</option>
-        <option>Pago</option>
-        <option>Enviado</option>
-        <option>Cancelado</option>
+      <select class="filter-select" name="status">
+        <option value="">Todos Status</option>
+        <option value="PENDENTE" th:selected="${statusSelecionado != null && statusSelecionado.name() == 'PENDENTE'}">Pendente</option>
+        <option value="ENTREGUE" th:selected="${statusSelecionado != null && statusSelecionado.name() == 'ENTREGUE'}">Entregue</option>
+        <option value="CANCELADO" th:selected="${statusSelecionado != null && statusSelecionado.name() == 'CANCELADO'}">Cancelado</option>
       </select>
-    </section>
+      <button type="submit" class="primary-btn">Filtrar</button>
+    </form>
 
     <!-- TABLE -->
 
@@ -81,13 +81,11 @@
           <tr th:each="pedido : ${pedidos}">
             <td th:text="'#' + ${pedido.id}"></td>
             <td th:text="${pedido.customerName}"></td>
-            <td th:text="${pedido.createdAt}"></td>
+            <td th:text="${#temporals.format(pedido.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
             <td th:text="${pedido.status}"></td>
             <td th:text="'R$ ' + ${pedido.total}"></td>
             <td>
-              <div class="actions">
-                <a th:href="@{'/pedido/' + ${pedido.id}}" class="edit-btn">Detalhes</a>
-              </div>
+              <a th:href="@{'/admin/pedido/' + ${pedido.id}}" class="edit-btn">Detalhes</a>
             </td>
           </tr>
         </tbody>

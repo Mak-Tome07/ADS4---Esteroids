@@ -45,10 +45,6 @@
         <a class="secondary-btn" th:href="@{/shop}">Ver Destaques</a>
       </div>
     </div>
-
-    <div class="hero-image">
-      <img th:src="@{/images/products/Maven-Sirius.png}" alt="Figure Maven Sirius">
-    </div>
   </section>
 
   <!-- POPULAR PRODUCTS -->
@@ -89,10 +85,10 @@
       <p>Explore universos diferentes.</p>
     </div>
     <div class="categories-grid">
-      <div class="category-card">Anime</div>
-      <div class="category-card">Games</div>
-      <div class="category-card">Filmes</div>
-      <div class="category-card">Fantasy</div>
+      <a th:href="@{/shop(category='ANIMES')}" class="category-card">Anime</a>
+      <a th:href="@{/shop(category='GAMES')}" class="category-card">Games</a>
+      <a th:href="@{/shop(category='FILMES')}" class="category-card">Filmes</a>
+      <a th:href="@{/shop(category='FANTASY')}" class="category-card">Fantasy</a>
     </div>
   </section>
 
@@ -100,14 +96,17 @@
 
   <section class="benefits-section">
     <div class="benefit-card">
+      <img th:src="@{/images/icons/delivery-svgrepo-com.svg}" alt="Frete Seguro">
       <h3>Frete Seguro</h3>
       <p>Entregas protegidas para todo Brasil.</p>
     </div>
     <div class="benefit-card">
+      <img th:src="@{/images/icons/premium-badge-svgrepo-com.svg}" alt="Produto Oficial">
       <h3>Produtos Exclusivos</h3>
       <p>Figures premium para colecionadores.</p>
     </div>
     <div class="benefit-card">
+      <img th:src="@{/images/icons/security-verified-svgrepo-com.svg}" alt="Compra Segura">
       <h3>Compra Segura</h3>
       <p>Ambiente protegido e confiável.</p>
     </div>

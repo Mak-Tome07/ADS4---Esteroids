@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.esteroids.esteroids.model.CartItem;
 import com.esteroids.esteroids.model.Order;
@@ -27,6 +29,7 @@ import com.esteroids.esteroids.model.OrderItem;
 import com.esteroids.esteroids.model.OrderItemDAO;
 import com.esteroids.esteroids.model.OrderService;
 import com.esteroids.esteroids.model.OrderStatus;
+import com.esteroids.esteroids.model.OrderView;
 import com.esteroids.esteroids.model.Product;
 import com.esteroids.esteroids.model.ProductService;
 import com.esteroids.esteroids.model.Role;
@@ -127,14 +130,19 @@ public class MainController {
         return "redirect:/listar/produtos";
     }
 
-    @PostMapping("/produto/{id}/deletar")
-    public String deletarProduto(@PathVariable int id){
-        ps.deletarProduto(id);
+    @GetMapping("/deletar/produto/{id}")
+    public String deletarProduto(@PathVariable int id, RedirectAttributes redirectAttributes){
+        try{
+            ps.deletarProduto(id);
+            redirectAttributes.addFlashAttribute("successMessage","Produto removido com sucesso.");
+        }catch(DataIntegrityViolationException e){
+            redirectAttributes.addFlashAttribute("errorMessage","Não é possível excluir este produto porque ele já faz parte de um pedido.");
+        }
         return "redirect:/listar/produtos";
     }
 
     @GetMapping("/listar/produtos")
-    public String listarProdutos(HttpSession session, Model model){
+    public String listarProdutos(@RequestParam(required = false) String busca, HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
         if(usuario == null){
             return "redirect:/auth";
@@ -142,8 +150,14 @@ public class MainController {
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-        List<Product> lista = ps.obterTodosProdutos();
+        List<Product> lista;
+        if(busca != null && !busca.isBlank()){
+            lista = ps.buscarProdutos(busca);
+        }else{
+            lista = ps.obterTodosProdutos();
+        }
         model.addAttribute("products", lista);
+        model.addAttribute("busca", busca);
         return "pages/products";
     }
 
@@ -165,15 +179,24 @@ public class MainController {
     }
 
     @GetMapping("/listar/pedidos")
-    public String listarPedidos(HttpSession session, Model model){
+    public String listarPedidos(@RequestParam(required = false) String busca, @RequestParam(required = false) OrderStatus status, HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
+        List<OrderView> pedidos = os.obterPedidosAdmin();
         if(usuario == null){
             return "redirect:/auth";
         }
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-        model.addAttribute("pedidos",os.obterPedidosAdmin());
+        if(busca != null && !busca.isBlank()){
+            pedidos = pedidos.stream().filter(p -> String.valueOf(p.getId()).contains(busca)).toList();
+        }
+        if(status != null){
+            pedidos = pedidos.stream().filter(p -> p.getStatus() == status).toList();
+        }
+        model.addAttribute("pedidos", pedidos);
+        model.addAttribute("busca", busca);
+        model.addAttribute("statusSelecionado", status);
         return "pages/pedidos";
     }
 
@@ -215,7 +238,7 @@ public class MainController {
     }
 
     @GetMapping("/listar/usuarios")
-    public String listarUsuarios(HttpSession session, Model model){
+    public String listarUsuarios(@RequestParam(required = false) String busca, HttpSession session, Model model){
         User usuario = (User) session.getAttribute("usuarioLogado");
         if(usuario == null){
             return "redirect:/auth";
@@ -223,8 +246,14 @@ public class MainController {
         if(usuario.getRole() != Role.ADMIN){
             return "redirect:/";
         }
-        List<User> lista = us.obterTodosUsuarios();
+        List<User> lista;
+        if(busca != null && !busca.isBlank()){
+            lista = us.buscarUsuarios(busca);
+        }else{
+            lista = us.obterTodosUsuarios();
+        }
         model.addAttribute("users", lista);
+        model.addAttribute("busca", busca);
         return "pages/users";
     }
 
@@ -320,6 +349,39 @@ public class MainController {
             cart.removeIf(item -> item.getProduct().getId() == id);
             session.setAttribute("cart", cart);
         }
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/cart/increase/{id}")
+    public String aumentarQuantidade(@PathVariable int id, HttpSession session){
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if(cart != null){
+            for(CartItem item : cart){
+                if(item.getProduct().getId() == id){
+                    if(item.getQuantity() < item.getProduct().getStock()){
+                        item.setQuantity(item.getQuantity() + 1);
+                    }
+                    break;
+                }
+            }
+        }
+    
+        return "redirect:/cart";
+    }
+
+    @PostMapping("/cart/decrease/{id}")
+    public String diminuirQuantidade(@PathVariable int id, HttpSession session){
+        List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+        if(cart != null){
+            cart.removeIf(item -> {
+                if(item.getProduct().getId() == id){
+                    item.setQuantity(item.getQuantity() - 1);
+                    return item.getQuantity() <= 0;
+                }
+                return false;
+            });
+        }
+
         return "redirect:/cart";
     }
 

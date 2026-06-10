@@ -1,107 +1,50 @@
 <!DOCTYPE html>
-<html lang="pt-BR"
-      xmlns:th="http://www.thymeleaf.org">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detalhes do Pedido</title>
-
-  <link rel="stylesheet"
-        th:href="@{/css/variables.css}">
-  <link rel="stylesheet"
-        th:href="@{/css/global.css}">
-  <link rel="stylesheet"
-        th:href="@{/css/shop.css}">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/shop.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
-
 <body>
-
-<header class="navbar">
-  <div class="logo">Esteroids</div>
-
-  <div class="nav-actions">
-    <a th:href="@{/meus-pedidos}">
-      ← Voltar
-    </a>
-  </div>
-</header>
-
-<section class="cart-header">
-  <h1>
-    Pedido #<span th:text="${pedido.id}"></span>
-  </h1>
-
-  <p>
-    Realizado em
-    <span th:text="${pedido.createdAt}">
-    </span>
-  </p>
-</section>
-
-<main class="cart-layout">
-
-  <section class="cart-items">
-
-    <article class="cart-item"
-             th:each="item,stat : ${itens}">
-
-      <img th:src="${produtos[stat.index].imageUrl}"
-           th:alt="${produtos[stat.index].name}">
-
-      <div class="cart-info">
-
-        <span class="catalog-category"
-              th:text="${produtos[stat.index].category}">
-        </span>
-
-        <h3 th:text="${produtos[stat.index].name}">
-        </h3>
-
-        <p>
-          Quantidade:
-          <strong th:text="${item.quantity}">
-          </strong>
-        </p>
-
-        <p>
-          Preço unitário:
-          R$
-          <span th:text="${item.unitPrice}">
-          </span>
-        </p>
-
-      </div>
-    </article>
-
+  <header class="navbar">
+    <div class="logo">Esteroids</div>
+    <div class="nav-actions">
+      <a th:href="@{/meus-pedidos}">← Voltar</a>
+    </div>
+  </header>
+  <section class="cart-header">
+    <h1>Pedido #<span th:text="${pedido.id}"></span></h1>
+    <p>Realizado em <span th:text="${#temporals.format(pedido.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
   </section>
-
-  <aside class="cart-summary">
-
-    <h2>Resumo</h2>
-
-    <div class="summary-row">
-      <span>Status</span>
-
-      <span th:text="${pedido.status}">
-      </span>
-    </div>
-
-    <div class="summary-row total-row">
-      <span>Total</span>
-
-      <span>
-        R$
-        <span th:text="${pedido.total}">
+  <main class="cart-layout">
+    <section class="cart-items">
+      <article class="cart-item" th:each="item,stat : ${itens}">
+        <img th:src="${produtos[stat.index].imageUrl}" th:alt="${produtos[stat.index].name}">
+        <div class="cart-info">
+          <span class="catalog-category" th:text="${produtos[stat.index].category}">
+          </span>
+          <h3 th:text="${produtos[stat.index].name}"></h3>
+          <p>Quantidade: <strong th:text="${item.quantity}"></strong></p>
+          <p>Preço unitário: R$<span th:text="${item.unitPrice}"></span></p>
+        </div>
+      </article>
+    </section>
+    <aside class="cart-summary">
+      <h2>Resumo</h2>
+      <div class="summary-row">
+        <span>Status</span>
+        <span th:text="${pedido.status}">
         </span>
-      </span>
-    </div>
-
-  </aside>
-
-</main>
-
+      </div>
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <span>R$ <span th:text="${pedido.total}"></span></span>
+      </div>
+    </aside>
+  </main>
 </body>
 </html>

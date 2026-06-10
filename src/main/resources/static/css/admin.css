@@ -541,6 +541,23 @@ body{
   cursor:pointer;
 }
 
+.error-message{
+
+  margin-bottom:20px;
+
+  padding:16px;
+
+  border-radius:12px;
+
+  background:rgba(255,93,115,.15);
+
+  border:1px solid rgba(255,93,115,.3);
+
+  color:var(--danger);
+
+  font-weight:600;
+}
+
 .pending-status{
 
   background:

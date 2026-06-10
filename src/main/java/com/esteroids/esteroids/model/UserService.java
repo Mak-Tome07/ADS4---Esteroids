@@ -34,4 +34,8 @@ public class UserService {
     public User buscarPorEmail(String email){
         return udao.buscarPorEmail(email);
     }
+
+    public List<User> buscarUsuarios(String busca){
+        return udao.buscarUsuarios(busca);
+    }
 }

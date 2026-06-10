@@ -7,7 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/variables.css}">
   <link rel="stylesheet" th:href="@{/css/global.css}">
   <link rel="stylesheet" th:href="@{/css/admin.css}">
-  <link rel="icon" type="image/svg+xml" th:href="@{/assets/smile-svgrepo-com.svg}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
 
 <body>
@@ -33,14 +33,21 @@
       </div>
     </header>
 
-    <section class="products-header">
+    <form class="products-header" method="get" th:action="@{/listar/produtos}">
       <div class="search-box">
-        <input type="text" placeholder="Buscar produto...">
+        <input type="text" name="busca" placeholder="Buscar produto..." th:value="${busca}">
       </div>
+      <button type="submit" class="primary-btn">Buscar</button>
       <a th:href="@{/produto}" class="primary-btn">+ Novo Produto</a>
-    </section>
+    </form>
 
     <section class="table-container" th:if="${not #lists.isEmpty(products)}">
+      <div th:if="${successMessage}" class="success-message">
+          <span th:text="${successMessage}"></span>
+      </div>
+      <div th:if="${errorMessage}" class="error-message">
+          <span th:text="${errorMessage}"></span>
+      </div>
       <table class="products-table">
         <thead>
           <tr>

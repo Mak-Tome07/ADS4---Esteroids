@@ -68,11 +68,17 @@
             </div>
 
           <div class="cart-quantity">
-            <button>-</button>
-            <span th:text="${item.quantity}"></span>
-            <button>+</button>
+              <form th:action="@{'/cart/decrease/' + ${item.product.id}}" method="post">
+                  <button type="submit">-</button>
+              </form>
+              <span th:text="${item.quantity}"></span>
+              <form th:action="@{'/cart/increase/' + ${item.product.id}}" method="post">
+                  <button type="submit">+</button>
+              </form>
           </div>
-          <a th:href="@{'/cart/remove/' + ${item.product.id}}" class="remove-btn">Remover</a>
+          <form th:action="@{'/cart/remove/' + ${item.product.id}}" method="post">
+            <button type="submit" class="remove-btn">Remover</button>
+          </form>
         </article>
       </div>
     </section>

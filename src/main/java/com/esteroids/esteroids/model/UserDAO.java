@@ -91,5 +91,13 @@ public class UserDAO {
         }
     }
 
-    
+    public List<User> buscarUsuarios(String busca){
+        String sql = "SELECT * FROM usuario WHERE LOWER(nome_usuario) LIKE LOWER(?) OR LOWER(email) LIKE LOWER(?)";
+        List<Map<String,Object>> registros = jdbc.queryForList(sql,"%" + busca + "%","%" + busca + "%");
+        List<User> lista = new ArrayList<>();
+        for(Map<String,Object> registro : registros){
+            lista.add(User.converterRegistros(registro));
+        }
+        return lista;
+    }
 }

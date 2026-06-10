@@ -7,8 +7,6 @@ target/
 .idea/
 .vscode/
 *.class
-
-src/main/resources/application.yaml
 .env
 
 ### STS ###

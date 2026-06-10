@@ -55,17 +55,17 @@
       <!-- STATUS -->
 
       <span class="stock-badge" th:if="${produto.stock > 0}">Em Estoque</span>
-      <span class="stock-badge out-badge" th:if="${produto.stock <= 0}">Sem Estoque</span>
+      <span class="out-badge out-of-stock" th:if="${produto.stock <= 0}">Sem Estoque</span>
 
       <form th:action="@{'/cart/add/' + ${produto.id}}" method="post">
 
         <!-- QUANTITY -->
 
-        <div class="quantity-wrapper">
-          <span>Quantidade</span>
-          <div class="cart-quantity">
-            <input type="number" name="quantity" value="1" min="1" th:max="${produto.stock}">
-          </div>
+        <div class="quantity-wrapper" th:if="${produto.stock > 0}">
+            <span>Quantidade</span>
+            <div class="cart-quantity">
+                <input type="number" name="quantity" value="1" min="1" th:max="${produto.stock}">
+            </div>
         </div>
       
         <!-- ACTIONS -->
@@ -82,10 +82,12 @@
 
       <div class="product-extra-info">
         <div class="info-card">
+          <img th:src="@{/images/icons/delivery-svgrepo-com.svg}" alt="Frete Seguro">
           <h3>Frete Seguro</h3>
           <p>Envio protegido para todo Brasil.</p>
         </div>
         <div class="info-card">
+          <img th:src="@{/images/icons/verified-svgrepo-com.svg}" alt="Produto Oficial">
           <h3>Produto Oficial</h3>
           <p>Figures licenciadas e premium.</p>
         </div>
@@ -109,11 +111,11 @@
             <span class="category" th:text="${relacionado.category}"></span>
             <h3 th:text="${relacionado.name}"></h3>
             <p class="price" th:text="'R$ ' + ${relacionado.price}"></p>
-            <form th:action="@{'/cart/add/' + ${relacionado.id}}" method="post">
+            <form th:if="${relacionado.stock > 0}" th:action="@{'/cart/add/' + ${relacionado.id}}" method="post">
               <input type="hidden" name="quantity" value="1">
               <button class="primary-btn add-cart-btn">Adicionar ao Carrinho</button>
             </form>
-            <button class="primary-btn disabled-btn" th:if="${relacionado.stock <= 0}">Indisponível</button>
+            <button th:if="${relacionado.stock <= 0}" class="primary-btn disabled-btn">Indisponível</button>
           </div>
         </a>
       </article>

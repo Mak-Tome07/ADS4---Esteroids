@@ -1,164 +1,64 @@
 <!DOCTYPE html>
-<html lang="pt-BR"
-      xmlns:th="http://www.thymeleaf.org">
-
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Detalhes do Pedido</title>
-
-  <link rel="stylesheet"
-        th:href="@{/css/variables.css}">
-  <link rel="stylesheet"
-        th:href="@{/css/global.css}">
-  <link rel="stylesheet"
-        th:href="@{/css/shop.css}">
+  <link rel="stylesheet" th:href="@{/css/variables.css}">
+  <link rel="stylesheet" th:href="@{/css/global.css}">
+  <link rel="stylesheet" th:href="@{/css/shop.css}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
-
 <body>
-
-<header class="navbar">
-  <div class="logo">Esteroids</div>
-
-  <div class="nav-actions">
-    <a th:href="@{/listar/pedidos}">
-      ← Voltar para Pedidos
-    </a>
-  </div>
-</header>
-
-<section class="cart-header">
-  <h1>
-    Pedido #<span th:text="${pedido.id}"></span>
-  </h1>
-
-  <p>
-    Realizado em
-    <span th:text="${pedido.createdAt}">
-    </span>
-  </p>
-</section>
-
-<main class="cart-layout">
+  <header class="navbar">
+    <div class="logo">Esteroids</div>
+    <div class="nav-actions">
+      <a th:href="@{/listar/pedidos}">← Voltar para Pedidos</a>
+    </div>
+  </header>
   <section class="cart-header">
-    
-    <h1>
-      Pedido #<span th:text="${pedido.id}"></span>
-    </h1>
-  
-    <p>
-      Realizado em
-      <span th:text="${pedido.createdAt}">
-      </span>
-    </p>
-  
-    <p>
-      Cliente:
-      <strong th:text="${cliente.username}"></strong>
-    </p>
-  
-    <p>
-      E-mail:
-      <strong th:text="${cliente.email}"></strong>
-    </p>
-  
+    <h1>Pedido #<span th:text="${pedido.id}"></span></h1>
+    <p>Realizado em <span th:text="${#temporals.format(pedido.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
   </section>
-
-  <section class="cart-items">
-
-    <article class="cart-item"
-             th:each="item,stat : ${itens}">
-
-      <img th:src="${produtos[stat.index].imageUrl}"
-           th:alt="${produtos[stat.index].name}">
-
-      <div class="cart-info">
-
-        <span class="catalog-category"
-              th:text="${produtos[stat.index].category}">
-        </span>
-
-        <h3 th:text="${produtos[stat.index].name}">
-        </h3>
-
-        <p>
-          Quantidade:
-          <strong th:text="${item.quantity}">
-          </strong>
-        </p>
-
-        <p>
-          Preço unitário:
-          R$
-          <span th:text="${item.unitPrice}">
-          </span>
-        </p>
-
+  <main class="cart-layout">
+    <section class="cart-header">
+      <h1>Pedido #<span th:text="${pedido.id}"></span></h1>
+      <p>Realizado em <span th:text="${#temporals.format(pedido.createdAt, 'dd/MM/yyyy HH:mm')}"></span></p>
+      <p>Cliente: <strong th:text="${cliente.username}"></strong></p>
+      <p>E-mail: <strong th:text="${cliente.email}"></strong></p>
+    </section>
+    <section class="cart-items">
+      <article class="cart-item" th:each="item,stat : ${itens}">
+        <img th:src="${produtos[stat.index].imageUrl}" th:alt="${produtos[stat.index].name}">
+        <div class="cart-info">
+          <span class="catalog-category" th:text="${produtos[stat.index].category}"></span>
+          <h3 th:text="${produtos[stat.index].name}"></h3>
+          <p>Quantidade: <strong th:text="${item.quantity}"></strong></p>
+          <p>Preço unitário: R$<span th:text="${item.unitPrice}"></span></p>
+        </div>
+      </article>
+    </section>
+    <aside class="cart-summary">
+      <h2>Gerenciar Pedido</h2>
+      <div class="summary-row">
+        <span>Status Atual</span>
+        <strong th:text="${pedido.status}">
+        </strong>
       </div>
-    </article>
-
-  </section>
-
-  <aside class="cart-summary">
-
-<h2>Gerenciar Pedido</h2>
-
-<div class="summary-row">
-  <span>Status Atual</span>
-
-  <strong th:text="${pedido.status}">
-  </strong>
-</div>
-
-<form th:action="@{'/admin/pedido/' + ${pedido.id} + '/status'}"
-      method="post">
-
-  <label>Novo Status</label>
-
-  <select name="status"
-          style="width:100%; margin:1rem 0;">
-
-      <option value="PENDENTE"
-              th:selected="${pedido.status.name() == 'PENDENTE'}">
-          Pendente
-      </option>
-
-      <option value="ENTREGUE"
-              th:selected="${pedido.status.name() == 'ENTREGUE'}">
-          Entregue
-      </option>
-
-      <option value="CANCELADO"
-              th:selected="${pedido.status.name() == 'CANCELADO'}">
-          Cancelado
-      </option>
-
-  </select>
-
-  <button type="submit"
-          class="primary-btn"
-          style="width:100%;">
-      Salvar Alterações
-  </button>
-
-</form>
-
-<hr style="margin:1.5rem 0;">
-
-<div class="summary-row total-row">
-  <span>Total</span>
-
-  <span>
-    R$
-    <span th:text="${pedido.total}">
-    </span>
-  </span>
-</div>
-  </aside>
-
-</main>
-
+      <form th:action="@{'/admin/pedido/' + ${pedido.id} + '/status'}" method="post">
+        <label>Novo Status</label>
+        <select name="status" class="filter-select" style="width:100%; margin:1rem 0;">
+            <option value="PENDENTE" th:selected="${pedido.status.name() == 'PENDENTE'}">Pendente</option>
+            <option value="ENTREGUE" th:selected="${pedido.status.name() == 'ENTREGUE'}">Entregue</option>
+            <option value="CANCELADO" th:selected="${pedido.status.name() == 'CANCELADO'}">Cancelado</option>
+        </select>
+        <button type="submit" class="primary-btn" style="width:100%;">Salvar Alterações</button>
+      </form>
+      <div class="summary-row total-row">
+        <span>Total</span>
+        <span>R$<span th:text="${pedido.total}"></span></span>
+      </div>
+    </aside>
+  </main>
 </body>
 </html>

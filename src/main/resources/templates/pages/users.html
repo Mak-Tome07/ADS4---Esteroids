@@ -7,7 +7,7 @@
   <link rel="stylesheet" th:href="@{/css/variables.css}">
   <link rel="stylesheet" th:href="@{/css/global.css}">
   <link rel="stylesheet" th:href="@{/css/admin.css}">
-  <link rel="icon" type="image/svg+xml" th:href="@{/assets/smile-svgrepo-com.svg}">
+  <link rel="icon" type="image/svg+xml" th:href="@{/images/icons/smile-svgrepo-com.svg}">
 </head>
 
 <body>
@@ -47,16 +47,12 @@
 
     <!-- FILTERS -->
 
-    <section class="customers-header">
-      <div class="search-box">
-        <input type="text" placeholder="Buscar cliente...">
-      </div>
-      <select class="filter-select">
-        <option>Todos</option>
-        <option>Ativos</option>
-        <option>Bloqueados</option>
-      </select>
-    </section>
+    <form class="customers-header" method="get" th:action="@{/listar/usuarios}">
+        <div class="search-box">
+            <input type="text" name="busca" placeholder="Buscar cliente..." th:value="${busca}">
+        </div>
+        <button type="submit" class="primary-btn">Buscar</button>
+    </form>
 
     <!-- TABLE -->
 
@@ -94,10 +90,11 @@
             <td>       
               <div class="actions">
                 <button class="edit-btn" disabled>Visualizar</button>
+                 <a th:href="@{'/usuario/' + ${user.id} + '/atualizar'}" class="edit-btn">Editar</a>
               </div>
             </td>
+            <td>
           </tr>
-          <a th:href="@{'/admin/usuario/editar/' + ${user.id}}">Editar</a>
         </tbody>
       </table>
     </section>
