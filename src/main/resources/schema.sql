@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS produto (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(255) NOT NULL,
+    nome VARCHAR(255) NOT NULL UNIQUE,
     descricao TEXT NOT NULL,
     preco NUMERIC(10,2) NOT NULL,
     estoque INTEGER NOT NULL,
