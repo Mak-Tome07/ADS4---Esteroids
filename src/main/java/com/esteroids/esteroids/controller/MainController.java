@@ -1,11 +1,6 @@
 package com.esteroids.esteroids.controller;
 
-import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +14,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.esteroids.esteroids.model.CartItem;
 import com.esteroids.esteroids.model.Order;
-import com.esteroids.esteroids.model.OrderDAO;
 import com.esteroids.esteroids.model.OrderItem;
-import com.esteroids.esteroids.model.OrderItemDAO;
 import com.esteroids.esteroids.model.OrderService;
 import com.esteroids.esteroids.model.OrderStatus;
 import com.esteroids.esteroids.model.OrderView;
@@ -69,24 +61,12 @@ public class MainController {
     }
 
     @PostMapping("/produto")
-    public String cadastrarProduto(@ModelAttribute Product product, @RequestParam("imagemArquivo") MultipartFile file) {          
-        if (!file.isEmpty()) {
-            try {
-                String pastaUpload = System.getProperty("user.dir") + "/uploads/";
-                File dir = new File(pastaUpload);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                String nomeOriginal = file.getOriginalFilename();
-                String nomeFinal = System.currentTimeMillis() + "_" + nomeOriginal;
-                Path caminhoCompleto = Paths.get(pastaUpload + nomeFinal);
-                Files.write(caminhoCompleto, file.getBytes());
-
-                product.setImageUrl("/uploads/" + nomeFinal);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public String cadastrarProduto(@ModelAttribute Product product) {     
+        // Se o usuário não preencher nenhuma URL, você pode definir uma imagem padrão (opcional)
+        if (product.getImageUrl() == null || product.getImageUrl().isBlank()) {
+            product.setImageUrl("/uploads/default-product.png"); // Imagem padrão que está na sua pasta static
         }
+
         ps.inserirProduto(product); 
         return "redirect:/listar/produtos";
     }
@@ -103,29 +83,18 @@ public class MainController {
     }
 
     @PostMapping("/produto/{id}/atualizar")
-    public String atualizarProduto(@PathVariable int id, @ModelAttribute Product product, @RequestParam(value = "imagemArquivo", required = false) MultipartFile file){
+    public String atualizarProduto(@PathVariable int id, @ModelAttribute Product product) {
         Product produtoBanco = ps.obterProduto(id);
-        if(produtoBanco == null){
+        if (produtoBanco == null) {
             return "redirect:/listar/produtos";
         }
-        if (file != null && !file.isEmpty()) {
-            try {
-                String pastaUpload = System.getProperty("user.dir") + "/uploads/";
-                File dir = new File(pastaUpload);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-                String nomeOriginal = file.getOriginalFilename();
-                String nomeFinal = System.currentTimeMillis() + "_" + nomeOriginal;
-                Path caminhoCompleto = Paths.get(pastaUpload + nomeFinal);
-                Files.write(caminhoCompleto, file.getBytes());
-                product.setImageUrl("/uploads/" + nomeFinal);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
+        
+        // Se no formulário de edição o campo de URL vier vazio, 
+        // mantemos a URL da imagem que já estava salva no banco
+        if (product.getImageUrl() == null || product.getImageUrl().isBlank()) {
             product.setImageUrl(produtoBanco.getImageUrl());
         }
+        
         ps.atualizarProduto(id, product);
         return "redirect:/listar/produtos";
     }
